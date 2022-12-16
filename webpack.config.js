@@ -60,7 +60,7 @@ module.exports = ({ develop }) => ({
     new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [
-        { from: './public' },
+        { from: './src/assets', to: './assets' },
       ],
     }),
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
