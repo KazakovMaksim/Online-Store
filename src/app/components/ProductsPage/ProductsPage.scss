@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   column-gap: 20px;
-  background-color:bisque;
+  background-color:rgba(255, 228, 196, 0);
   padding: 10px;
   flex-shrink: 1;
   flex-grow: 1;
@@ -10,7 +10,7 @@
 
 .controls-container {
   flex: 0 1 20%;
-  background-color: #F89F5B;
+  background-color: #f89f5b00;
 }
 
 .products-container {
@@ -18,13 +18,13 @@
   display: flex;
   flex-direction: column;
   flex: 0 1 80%;
-  background-color: #F89F5B;
+  background-color: #f89f5b00;
 }
 
 .products-list{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: flex-start;
   gap: 20px;
 }
 
@@ -80,4 +80,8 @@
       height: 20px;
     }
   }
+}
+
+.fix-width{
+  flex-grow: 0;
 }

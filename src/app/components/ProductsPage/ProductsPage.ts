@@ -8,7 +8,14 @@ export class ProductsPage extends Component {
 
   productsContainer = new Component(this.node, 'div', 'products-container');
 
-  private productsFound: Component;
+  productList: Component;
+
+  productsFound: Component;
+
+  updateQtyDisplay() {
+    const qty = (this.productList.node as HTMLElement).children.length;
+    this.productsFound.node.textContent = String(qty);
+  }
 
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
@@ -24,6 +31,7 @@ export class ProductsPage extends Component {
     // two main blocks in product-container
     const listSettings = new Component(this.productsContainer.node, 'article', 'list-settings');
     const productList = new Component(this.productsContainer.node, 'div', 'products-list');
+    this.productList = productList;
 
     // settings list components
     const sortOptions = new Component(listSettings.node, 'select', 'sort-options');
@@ -53,7 +61,7 @@ export class ProductsPage extends Component {
 
     // product found lable
     const productFoundLable = new Component(listSettings.node, 'p', 'product-found-lable');
-    this.productsFound = new Component(productFoundLable.node, 'span', 'product-found-qty', '101');
+    this.productsFound = new Component(productFoundLable.node, 'span', 'product-found-qty', '0');
     new Component(productFoundLable.node, 'span', 'product-found-text', ' Product Found');
 
     // decorative line - hr
@@ -69,7 +77,7 @@ export class ProductsPage extends Component {
     products.products.forEach(
       (el) =>
         new Card(
-          productList.node,
+          this.productList.node,
           el.id,
           el.title,
           el.description,
@@ -83,5 +91,24 @@ export class ProductsPage extends Component {
           el.images,
         ),
     );
+
+    this.updateQtyDisplay();
+
+    fixLastItemsDisplay();
+
+    window.addEventListener('resize', fixLastItemsDisplay);
+
+    function fixLastItemsDisplay() {
+      const products = productList.node.children;
+      [...products].forEach((el) => el.classList.remove('fix-width'));
+      if (window.innerWidth > 1239) {
+        const productsQty = products.length;
+        const remain = productsQty % 3;
+        const remainItems = [...productList.node.children].filter(
+          (el, indx) => indx + 1 > productsQty - remain,
+        );
+        remainItems.forEach((el) => el.classList.add('fix-width'));
+      }
+    }
   }
 }
