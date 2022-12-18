@@ -65,5 +65,23 @@ export class ProductsPage extends Component {
     const btnRowDisplay = new Component(buttonsContainer.node, 'button', 'btn btn-row-display');
     new Component(btnGridDisplay.node, 'img', 'grid-icon');
     new Component(btnRowDisplay.node, 'img', 'row-icon');
+
+    products.products.forEach(
+      (el) =>
+        new Card(
+          productList.node,
+          el.id,
+          el.title,
+          el.description,
+          el.price,
+          el.discountPercentage,
+          el.rating,
+          el.stock,
+          el.brand,
+          el.category,
+          el.thumbnail,
+          el.images,
+        ),
+    );
   }
 }

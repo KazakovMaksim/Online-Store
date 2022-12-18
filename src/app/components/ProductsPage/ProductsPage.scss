@@ -3,8 +3,9 @@
   justify-content: space-between;
   column-gap: 20px;
   background-color:bisque;
-  height: calc(100vh - 118px);
   padding: 10px;
+  flex-shrink: 1;
+  flex-grow: 1;
 }
 
 .controls-container {
@@ -18,6 +19,13 @@
   flex-direction: column;
   flex: 0 1 80%;
   background-color: #F89F5B;
+}
+
+.products-list{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
 }
 
 .list-settings{
