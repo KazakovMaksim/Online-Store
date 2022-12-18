@@ -69,10 +69,30 @@ export class ProductsPage extends Component {
 
     // items display buttons
     const buttonsContainer = new Component(listSettings.node, 'div', 'btns-container');
-    const btnGridDisplay = new Component(buttonsContainer.node, 'button', 'btn btn-grid-display');
+    const btnGridDisplay = new Component(
+      buttonsContainer.node,
+      'button',
+      'btn btn-grid-display active',
+    );
     const btnRowDisplay = new Component(buttonsContainer.node, 'button', 'btn btn-row-display');
     new Component(btnGridDisplay.node, 'img', 'grid-icon');
     new Component(btnRowDisplay.node, 'img', 'row-icon');
+
+    function changeItemsDisplay(event: Event) {
+      const currentBtn = event.currentTarget as HTMLElement;
+      for (const button of buttonsContainer.node.children) {
+        button.classList.remove('active');
+      }
+      currentBtn.classList.add('active');
+      console.log(currentBtn.classList);
+      if (currentBtn.classList.contains('btn-row-display'))
+        productList.node.classList.add('row-display');
+      else productList.node.classList.remove('row-display');
+    }
+
+    for (const button of buttonsContainer.node.children) {
+      button.addEventListener('click', changeItemsDisplay);
+    }
 
     products.products.forEach(
       (el) =>

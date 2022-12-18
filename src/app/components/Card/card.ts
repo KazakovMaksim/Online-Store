@@ -4,7 +4,8 @@ import './card.scss';
 export class Card extends Component {
   id: number;
   mainImage: HTMLElement = new Component(this.node, 'div', 'product-image').node;
-  title: HTMLElement = new Component(this.node, 'p', 'product-title').node;
+  descriptionContainer: HTMLElement = new Component(this.node, 'div', 'desc-container').node;
+  title: HTMLElement = new Component(this.descriptionContainer, 'p', 'product-title').node;
   description: HTMLElement;
   price: HTMLElement;
   discount: number;
@@ -32,10 +33,25 @@ export class Card extends Component {
     super(parentNode, 'div', 'prodcut-card');
     this.mainImage.style.backgroundImage = `url(${thumbnail})`;
     this.title.textContent = title;
-    const priceAddContainer = new Component(this.node, 'div', 'price-add-container');
+    const priceAddContainer = new Component(
+      this.descriptionContainer,
+      'div',
+      'price-add-container',
+    );
     this.price = new Component(priceAddContainer.node, 'div', 'product-price', `€${price}`).node;
-    const btnAdd = new Component(priceAddContainer.node, 'button', 'btn-add-product', 'Add').node;
-    this.description = new Component(this.node, 'p', 'product-description', `${description}`).node;
+    const btnAdd = new Component(
+      priceAddContainer.node,
+      'button',
+      'btn btn-add-product',
+      'Add to Cart',
+    ).node;
+
+    this.description = new Component(
+      this.descriptionContainer,
+      'p',
+      'product-description',
+      `${description}`,
+    ).node;
 
     // hidden card(product)'s properties
     this.id = id;
