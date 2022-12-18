@@ -28,6 +28,11 @@ body{
   margin: 0;
 }
 
+.wrapper{
+  width: 1040px;
+  margin: 0 auto;
+}
+
 @media screen and (max-width: 650px) {
   html{
     font-size: 14px;
