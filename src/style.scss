@@ -1,4 +1,7 @@
-@import './app/components/Header/header.scss';
+// @import './app/components/Header/header.scss';
+* {
+  box-sizing: border-box;
+}
 
 html{
   background-color: rgb(239, 239, 239);

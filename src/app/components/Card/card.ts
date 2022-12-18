@@ -2,7 +2,7 @@ import { Component } from '../component';
 import './card.scss';
 
 export class Card extends Component {
-  productName = new Component(this.node, 'div', 'product-name');
+  productName: HTMLElement;
 
   productSize = new Component(this.node, 'div', 'product-size');
 
@@ -10,5 +10,6 @@ export class Card extends Component {
 
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'card');
+    this.productName = new Component(this.node, 'div', 'product-name').node;
   }
 }

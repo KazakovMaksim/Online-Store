@@ -1,20 +1,21 @@
 import { Href } from '../constants/router-refs';
-import { Component } from '../components/component';
 import { IRoute } from '../types/interface';
-import { MainPage } from '../components/Main/main';
+import { HomePage } from '../components/HomePage/HomePage';
+import { CartPage } from '../components/CartPage/CartPage';
+import { ProductsPage } from '../components/ProductsPage/ProductsPage';
 
 export const routing: IRoute[] = [
   {
     name: Href.CART,
-    component: (): Component => new Component(null),
+    component: (): CartPage => new CartPage(null),
   },
   {
     name: Href.PRODUCTS,
-    component: (): Component => new Component(null),
+    component: (): ProductsPage => new ProductsPage(null),
   },
 ];
 
 export const defaultRoute: IRoute = {
   name: Href.HOME,
-  component: () => new MainPage(document.body),
+  component: () => new HomePage(null),
 };

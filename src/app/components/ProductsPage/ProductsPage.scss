@@ -1,0 +1,21 @@
+.products-page {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 20px;
+  background-color:bisque;
+  height: calc(100vh - 118px);
+  padding: 10px;
+}
+
+.controls-container {
+  flex: 0 1 15%;
+  background-color: #F89F5B;
+}
+
+.products-container {
+  padding: 10px;
+  display: flex;
+  justify-content:space-around;
+  flex: 0 1 85%;
+  background-color: #F89F5B;
+}
