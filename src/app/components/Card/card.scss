@@ -1,6 +1,6 @@
 .prodcut-card {
   flex: 1 1 300px;
-  height: 220px;
+  height: 230px;
   background-color: #aa68d000;
   display: flex;
   flex-direction: column;
@@ -80,5 +80,16 @@
     flex-grow: 1;
   }
 
+}
+
+.star-rating{
+  align-self: flex-start;
+  flex-wrap: nowrap;
+  overflow: visible;
+  white-space: nowrap;
+  color: transparent;
+  background-color: rgb(227, 156, 14);
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 1px rgb(29, 8, 8);
 }
 
