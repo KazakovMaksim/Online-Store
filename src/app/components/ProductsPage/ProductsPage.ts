@@ -5,16 +5,40 @@ import './ProductsPage.scss';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
-
   productsContainer = new Component(this.node, 'div', 'products-container');
-
   productList: Component;
-
   productsFound: Component;
+  sortOptions: Component;
+  allCards: Card[] = [];
 
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
     this.productsFound.node.textContent = String(qty);
+  }
+
+  loadCards() {
+    const cards = this.allCards;
+    const productList = this.productList.node;
+    const sortIndex = (this.sortOptions.node as HTMLSelectElement).selectedIndex;
+    if (sortIndex > 0) {
+      if (sortIndex === 1) {
+        cards.sort((a: Card, b: Card) => a.price - b.price);
+      }
+      if (sortIndex === 2) {
+        cards.sort((a: Card, b: Card) => b.price - a.price);
+      }
+      if (sortIndex === 3) {
+        cards.sort((a: Card, b: Card) => a.rating - b.rating);
+      }
+      if (sortIndex === 4) {
+        cards.sort((a: Card, b: Card) => b.rating - a.rating);
+      }
+      console.log(sortIndex);
+      productList.textContent = '';
+      cards.forEach((card) => {
+        productList.append(card.node);
+      });
+    }
   }
 
   constructor(parentNode: HTMLElement | null) {
@@ -34,28 +58,28 @@ export class ProductsPage extends Component {
     this.productList = productList;
 
     // settings list components
-    const sortOptions = new Component(listSettings.node, 'select', 'sort-options');
-    const sortLable = new Component(sortOptions.node, 'option', 'sort-lable', 'Sort options:')
+    this.sortOptions = new Component(listSettings.node, 'select', 'sort-options');
+    const sortLable = new Component(this.sortOptions.node, 'option', 'sort-lable', 'Sort options:')
       .node as HTMLOptionElement;
 
     sortLable.selected = true;
     sortLable.disabled = true;
 
     (
-      new Component(sortOptions.node, 'option', 'sort-item', 'Sort by price ASC')
+      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by price ASC')
         .node as HTMLOptionElement
     ).value = 'price-ASC';
     (
-      new Component(sortOptions.node, 'option', 'sort-item', 'Sort by price DESC')
+      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by price DESC')
         .node as HTMLOptionElement
     ).value = 'price-DESC';
 
     (
-      new Component(sortOptions.node, 'option', 'sort-item', 'Sort by rating ASC')
+      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by rating ASC')
         .node as HTMLOptionElement
     ).value = 'rating-ASC';
     (
-      new Component(sortOptions.node, 'option', 'sort-item', 'Sort by rating DESC')
+      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by rating DESC')
         .node as HTMLOptionElement
     ).value = 'rating-DESC';
 
@@ -94,8 +118,8 @@ export class ProductsPage extends Component {
       button.addEventListener('click', changeItemsDisplay);
     }
 
-    products.products.forEach(
-      (el) =>
+    products.products.forEach((el) =>
+      this.allCards.push(
         new Card(
           this.productList.node,
           el.id,
@@ -110,7 +134,13 @@ export class ProductsPage extends Component {
           el.thumbnail,
           el.images,
         ),
+      ),
     );
+
+    this.sortOptions.node.addEventListener('change', this.loadCards.bind(this));
+    this.sortOptions.node.addEventListener('change', fixLastItemsDisplay);
+
+    this.loadCards();
 
     this.updateQtyDisplay();
 

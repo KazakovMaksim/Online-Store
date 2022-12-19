@@ -7,7 +7,7 @@ export class Card extends Component {
   descriptionContainer: HTMLElement = new Component(this.node, 'div', 'desc-container').node;
   title: HTMLElement = new Component(this.descriptionContainer, 'p', 'product-title').node;
   description: HTMLElement;
-  price: HTMLElement;
+  price: number;
   discount: number;
   rating: number;
   stock: number;
@@ -38,7 +38,8 @@ export class Card extends Component {
       'div',
       'price-add-container',
     );
-    this.price = new Component(priceAddContainer.node, 'div', 'product-price', `€${price}`).node;
+    new Component(priceAddContainer.node, 'div', 'product-price', `€${price}`).node;
+    this.price = price;
     const btnAdd = new Component(
       priceAddContainer.node,
       'button',

@@ -73,6 +73,7 @@
       content: url('../../../assets/img/productPage/grid_icon.svg');
       width: 20px;
       height: 20px;
+      margin: auto auto;
     }
 
     
@@ -81,11 +82,12 @@
   .btn-row-display{
     width: 26px;
     height: 26px;
-
+    padding: 0;
     .row-icon{
       content: url('../../../assets/img/productPage/row-icon.svg');
       width: 16px;
       height: 20px;
+      margin: auto auto;
     }
   }
 
