@@ -25,7 +25,6 @@
 }
 
 .product-price{
-  padding-left: 5px;
   padding-top: 2px;
   color: rgb(216, 159, 89);
   font-weight: bold;
@@ -36,7 +35,6 @@
 
 .product-title{
   margin: 5px 0;
-  padding-left: 5px;
   width: 100%;
   height: 20px;
   text-overflow: ellipsis;
@@ -80,6 +78,10 @@
     flex-grow: 1;
   }
 
+}
+
+.desc-container{
+  padding-left: 5px;
 }
 
 .star-rating{
