@@ -6,6 +6,7 @@
 html{
   background-color: rgb(239, 239, 239);
   font-size: 16px;
+  font-family: 'Baloo2';
 }
 
 h1,
@@ -26,6 +27,11 @@ a{
 
 body{
   margin: 0;
+}
+
+.wrapper{
+  max-width: 1250px;
+  margin: 0 auto;
 }
 
 @media screen and (max-width: 650px) {
