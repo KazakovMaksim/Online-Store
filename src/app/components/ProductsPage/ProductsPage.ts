@@ -3,7 +3,8 @@ import { Card } from '../Card/card';
 import { products } from '../../data/products';
 import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
-import { formCollection } from '../Helpers/filter';
+import { countRange, formCollection } from '../Helpers/filter';
+import { SliderFilter } from '../SliderFilter/SliderFilter';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
@@ -17,6 +18,8 @@ export class ProductsPage extends Component {
 
   categoryFilter: Component;
   brandFilter: Component;
+  priceFilter: Component;
+  stockFilter: Component;
 
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
@@ -51,9 +54,20 @@ export class ProductsPage extends Component {
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
 
-    this.categoryFilter = new CheckboxFilter(this.categoryList, 'category');
-    this.brandFilter = new CheckboxFilter(this.brandList, 'brand');
-    this.controlsContainer.node.append(this.categoryFilter.node, this.brandFilter.node);
+    // implement filters block
+    const priceRange = countRange(products.products, 'price');
+    const stockRange = countRange(products.products, 'stock');
+
+    this.categoryFilter = new CheckboxFilter(this.categoryList, 'Category');
+    this.brandFilter = new CheckboxFilter(this.brandList, 'Brand');
+    this.priceFilter = new SliderFilter('Price', priceRange);
+    this.stockFilter = new SliderFilter('Stock', stockRange);
+    this.controlsContainer.node.append(
+      this.categoryFilter.node,
+      this.brandFilter.node,
+      this.priceFilter.node,
+      this.stockFilter.node,
+    );
 
     // two main blocks in product-container
     const listSettings = new Component(this.productsContainer.node, 'article', 'list-settings');

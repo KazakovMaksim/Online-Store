@@ -22,7 +22,7 @@ export class CheckboxFilter extends Component {
 
     const filterSpoiler = new Component(this.node, 'div', 'filter-spoiler');
     new Component(filterSpoiler.node, 'a');
-    const spoilerText = new Component(filterSpoiler.node, 'span', '', 'показать еще ∨');
+    const spoilerText = new Component(filterSpoiler.node, 'span', '', 'show more ∨');
 
     filterSpoiler.node.onclick = () => {
       this.changeFilterContent(spoilerText.node);
@@ -31,7 +31,7 @@ export class CheckboxFilter extends Component {
 
   changeFilterContent(spoilerText: HTMLElement) {
     const text = spoilerText.innerText;
-    spoilerText.innerText = text === 'скрыть ∧' ? 'показать еще ∨' : 'скрыть ∧';
+    spoilerText.innerText = text === 'hide ∧' ? 'show more ∨' : 'hide ∧';
 
     Array.from(this.filterGroup.node.children).forEach((child, i) => {
       if (i >= 5) {

@@ -10,6 +10,11 @@ export function formCollection(sourceArr: ProductItem[], selector: Selector) {
   return collection;
 }
 
-// if (this.categoryList.indexOf(product.category) < 0) {
-//   this.categoryList.push(product.category);
-// }
+export function countRange(sourceArr: ProductItem[], selector: 'price' | 'stock') {
+  const collection = sourceArr
+    .map((product: ProductItem) => product[selector])
+    .sort((a, b) => a - b);
+  const min = collection[0];
+  const max = Math.max.apply(null, collection);
+  return [min, max];
+}
