@@ -1,7 +1,9 @@
 import { Component } from '../component';
 import { Card } from '../Card/card';
 import { products } from '../../data/products';
+import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
+import { formCollection } from '../Helpers/filter';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
@@ -9,7 +11,12 @@ export class ProductsPage extends Component {
   productList: Component;
   productsFound: Component;
   sortOptions: Component;
+  categoryList: string[] = formCollection(products.products, 'category');
+  brandList: string[] = formCollection(products.products, 'brand');
   allCards: Card[] = [];
+
+  categoryFilter: Component;
+  brandFilter: Component;
 
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
@@ -44,13 +51,9 @@ export class ProductsPage extends Component {
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
 
-    // products.forEach((el) => {
-    //   const card = new Card(null);
-    //   card.productName.innerText = el.name;
-    //   card.productSize.node.innerText = el.size;
-    //   card.productShape.node.innerText = el.shape;
-    //   this.productsContainer.node.append(card.node);
-    // });
+    this.categoryFilter = new CheckboxFilter(this.categoryList, 'category');
+    this.brandFilter = new CheckboxFilter(this.brandList, 'brand');
+    this.controlsContainer.node.append(this.categoryFilter.node, this.brandFilter.node);
 
     // two main blocks in product-container
     const listSettings = new Component(this.productsContainer.node, 'article', 'list-settings');
@@ -126,7 +129,7 @@ export class ProductsPage extends Component {
           el.title,
           el.description,
           el.price,
-          el.discountPercentage,
+          el.discount,
           el.rating,
           el.stock,
           el.brand,

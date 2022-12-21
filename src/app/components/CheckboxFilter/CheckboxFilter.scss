@@ -1,0 +1,26 @@
+.filter {
+  padding: 8px;
+  &-group {
+    max-height: 200px;
+    overflow: auto;
+  }
+  &-title {
+    font-weight: 900;
+    padding-bottom: 10px;
+  }
+  &-spoiler {
+    padding-top: 10px;
+    color: #666;
+    cursor: pointer;
+    &:hover {
+      color:aqua;
+    }
+  }
+  &-field {
+    margin: 0 0 5px;
+    cursor: pointer;
+  }
+}
+.hidden {
+  display: none;
+}
