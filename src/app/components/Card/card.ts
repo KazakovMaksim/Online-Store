@@ -47,6 +47,8 @@ export class Card extends Component {
     );
     new Component(priceAddContainer.node, 'div', 'product-price', `€${price}`).node;
     this.price = price;
+    const btnDetails = new Component(priceAddContainer.node, 'button', 'btn btn-details', 'Details')
+      .node;
     const btnAdd = new Component(
       priceAddContainer.node,
       'button',
@@ -69,5 +71,10 @@ export class Card extends Component {
     this.category = category;
     this.stock = stock;
     this.images = images;
+
+    // buttons handlers
+    btnDetails.addEventListener('click', () => {
+      window.location.hash = `product-details/${this.id}`;
+    });
   }
 }

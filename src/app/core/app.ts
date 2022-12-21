@@ -5,6 +5,7 @@ import { HomePage } from '../components/HomePage/HomePage';
 import { CartPage } from '../components/CartPage/CartPage';
 import { ProductsPage } from '../components/ProductsPage/ProductsPage';
 import { routing, defaultRoute } from './router';
+import { ProductDetailsPage } from '../components/ProductDetailsPage/productDetails';
 
 export class App {
   main = new Component(null, 'main', 'main');
@@ -13,7 +14,8 @@ export class App {
 
   enableRouteChange = (): void => {
     window.onpopstate = () => {
-      const currentRouteName = window.location.hash.slice(1);
+      const hash = window.location.hash;
+      const currentRouteName = hash.slice(1, hash.indexOf('/'));
       const currentRoute = routing.find((p) => p.name === currentRouteName);
       this.mainContent?.node.remove();
 
@@ -26,6 +28,10 @@ export class App {
       }
       if (currentRouteName === 'cart') {
         this.mainContent = currentRoute?.component() as CartPage;
+      }
+      if (currentRouteName === 'product-details') {
+        const productId = Number(hash.slice(hash.indexOf('/') + 1));
+        this.mainContent = currentRoute?.component(productId) as ProductDetailsPage;
       }
 
       if (currentRoute && this.mainContent) {
