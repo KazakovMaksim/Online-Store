@@ -1,11 +1,12 @@
 .prodcut-card {
   flex: 1 1 300px;
   height: 230px;
-  background-color: #aa68d000;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-radius: 5px;
+  border: 1px solid rgb(219, 219, 219);
 }
 
 .product-image{
@@ -30,7 +31,9 @@
   font-weight: bold;
   font-size: 20px;
   flex-grow: 1;
+  display: flex;
   border-radius: 5px;
+  align-items: center;
 }
 
 .product-title{
@@ -69,7 +72,9 @@
   .product-image{
     width: 320px;
     height: 200px;
-    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 0;
   }
 
   .desc-container{
@@ -82,6 +87,7 @@
 
 .desc-container{
   padding-left: 5px;
+  padding-right: 5px;
 }
 
 .star-rating{

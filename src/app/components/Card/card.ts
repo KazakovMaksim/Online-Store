@@ -33,7 +33,6 @@ export class Card extends Component {
     super(parentNode, 'div', 'prodcut-card');
     this.mainImage.style.backgroundImage = `url(${thumbnail})`;
     this.title.textContent = title;
-    const maxStarsWidth = 82.6667;
     new Component(
       this.descriptionContainer,
       'div',
