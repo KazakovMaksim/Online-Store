@@ -5,6 +5,7 @@ import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
 import { countRange, formCollection } from '../Helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
+import { ProductItem } from '../../types/interface';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
@@ -65,6 +66,7 @@ export class ProductsPage extends Component {
     cards.forEach((card) => {
       productList.append(card.node);
     });
+
     this.updateQtyDisplay();
   }
 
@@ -105,23 +107,12 @@ export class ProductsPage extends Component {
     sortLable.selected = true;
     sortLable.disabled = true;
 
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by price ASC')
-        .node as HTMLOptionElement
-    ).value = 'price-ASC';
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by price DESC')
-        .node as HTMLOptionElement
-    ).value = 'price-DESC';
-
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by rating ASC')
-        .node as HTMLOptionElement
-    ).value = 'rating-ASC';
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by rating DESC')
-        .node as HTMLOptionElement
-    ).value = 'rating-DESC';
+    ['price ASC', 'price DESC', 'rating ASC', 'rating DESC'].forEach((sort) => {
+      (
+        new Component(this.sortOptions.node, 'option', 'sort-item', `Sort by ${sort}`)
+          .node as HTMLOptionElement
+      ).value = sort;
+    });
 
     // product found lable
     const productFoundLable = new Component(listSettings.node, 'p', 'product-found-lable');
@@ -158,23 +149,8 @@ export class ProductsPage extends Component {
       button.addEventListener('click', changeItemsDisplay);
     }
 
-    products.products.forEach((el) =>
-      this.allCards.push(
-        new Card(
-          this.productList.node,
-          el.id,
-          el.title,
-          el.description,
-          el.price,
-          el.discount,
-          el.rating,
-          el.stock,
-          el.brand,
-          el.category,
-          el.thumbnail,
-          el.images,
-        ),
-      ),
+    products.products.forEach((product: ProductItem) =>
+      this.allCards.push(new Card(this.productList.node, product)),
     );
 
     this.sortOptions.node.addEventListener('change', () => this.loadCards());
