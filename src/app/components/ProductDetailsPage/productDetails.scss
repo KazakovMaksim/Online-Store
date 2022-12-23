@@ -2,6 +2,43 @@
   display: flex;
   flex-direction: column;
   padding-top: 100px;
+
+  .btn-back{
+    padding: 5px;
+   line-height: 1;
+    font-size: 1.2rem;
+
+    .left-arrow{
+      transition: 0.2s;
+      width: 15px;
+      height: 15px;
+      background-image: url('../../../assets/img/left-arrow.svg');
+      background-size: cover;
+      order: -1;
+
+      .btn-back:hover &{
+        filter: invert(100%);
+      }
+    }
+
+    &:hover .left-arrow{
+      filter:invert(100%);
+    }
+  }
+
+  .bread-crumbs-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    word-spacing: 20px;
+  }
+
+  .selected{
+    box-sizing: border-box;
+    border: 2px solid orange;
+  }
+  
 }
 
 .photos-container{
@@ -86,6 +123,8 @@
     text-transform: uppercase;
   }
 }
+
+
 
 
 

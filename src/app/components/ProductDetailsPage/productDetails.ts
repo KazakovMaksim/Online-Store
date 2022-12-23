@@ -11,10 +11,19 @@ export class ProductDetailsPage extends Component {
     ) as product;
 
     // primary blocks
+    const breadCrumbsBlock = new Component(
+      this.node,
+      'div',
+      'bread-crumbs-container',
+      `STORE > ${selectedProduct.category} > ${selectedProduct.brand} > ${selectedProduct.title}`,
+    );
+    const backButtonBlock = new Component(this.node, 'div', 'back-button-container');
     const infoBlock = new Component(this.node, 'div', 'info-container');
     const photosBlock = new Component(infoBlock.node, 'div', 'photos-container');
     const detailsBlock = new Component(infoBlock.node, 'div', 'details-container');
     const buttonsBlock = new Component(this.node, 'div', 'buttons-container');
+
+    // bread crumbs block
 
     // photos block
     const bigPhotoBlock = new Component(photosBlock.node, 'img', 'big-img');
@@ -26,7 +35,13 @@ export class ProductDetailsPage extends Component {
       photoItem.node.style.backgroundImage = `url(${img})`;
       photoItem.node.addEventListener('click', () => {
         (bigPhotoBlock.node as HTMLImageElement).src = String(img);
+        for (const listItem of photosList.node.children) {
+          listItem.classList.remove('selected');
+        }
+        (photoItem.node as HTMLImageElement).classList.add('selected');
       });
+      if (img === (bigPhotoBlock.node as HTMLImageElement).src)
+        photoItem.node.classList.add('selected');
     });
 
     // details block
@@ -44,5 +59,10 @@ export class ProductDetailsPage extends Component {
     // buttons block
     const btnAdd = new Component(buttonsBlock.node, 'button', 'btn btn-desc-add', 'Add to Cart');
     const btnBuyNow = new Component(buttonsBlock.node, 'button', 'btn btn-desc-buy-now', 'Buy Now');
+
+    // back button block
+    const btnBack = new Component(backButtonBlock.node, 'button', 'btn btn-back', 'Back');
+    new Component(btnBack.node, 'div', 'left-arrow');
+    btnBack.node.addEventListener('click', () => history.back());
   }
 }
