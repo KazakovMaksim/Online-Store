@@ -4,6 +4,9 @@ import './CheckboxFilter.scss';
 
 export class CheckboxFilter extends Component {
   filterGroup = new Component(null, 'div', 'filter-group');
+  category: string[] = [];
+  brand: string[] = [];
+  onCheckbox: (categoryQuery: string[], brandQuery: string[]) => void = () => console.log();
 
   constructor(categoryList: string[], listName: string) {
     super(null, 'div', 'filter');
@@ -25,6 +28,7 @@ export class CheckboxFilter extends Component {
         } else {
           this.updateQueryInURL(catName, listName, 'del');
         }
+        this.onCheckbox([...this.category], [...this.brand]);
       };
     });
 
@@ -35,6 +39,10 @@ export class CheckboxFilter extends Component {
     filterSpoiler.node.onclick = () => {
       this.changeFilterContent(spoilerText.node);
     };
+  }
+
+  applyFilter() {
+    throw new Error('Method not implemented.');
   }
 
   changeFilterContent(spoilerText: HTMLElement) {
@@ -50,19 +58,21 @@ export class CheckboxFilter extends Component {
 
   updateQueryInURL(parameterValue: string, parameterName: string, operation: string) {
     const newUrl = new URL(window.location.href);
-    const category = newUrl.searchParams.getAll('category');
-    const brand = newUrl.searchParams.getAll('brand');
+    this.category = newUrl.searchParams.getAll('category');
+    this.brand = newUrl.searchParams.getAll('brand');
 
     if (window.location.href.indexOf('?') < 0) {
       newUrl.searchParams.set(parameterName.toLowerCase(), parameterValue);
     } else {
       if (parameterName.toLowerCase() === 'category') {
-        changeQueryParameterValues(parameterValue, parameterName, operation, category, newUrl);
+        changeQueryParameterValues(parameterValue, parameterName, operation, this.category, newUrl);
       }
       if (parameterName.toLowerCase() === 'brand') {
-        changeQueryParameterValues(parameterValue, parameterName, operation, brand, newUrl);
+        changeQueryParameterValues(parameterValue, parameterName, operation, this.brand, newUrl);
       }
     }
     history.pushState(null, '', newUrl.href);
+    this.category = newUrl.searchParams.getAll('category');
+    this.brand = newUrl.searchParams.getAll('brand');
   }
 }

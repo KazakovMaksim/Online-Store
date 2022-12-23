@@ -27,10 +27,10 @@ export function changeQueryParameterValues(
   newUrl: URL,
 ) {
   if (operation === 'del') {
-    const categoryArr = parameterValues[0]?.split('|');
-    categoryArr?.splice(categoryArr.indexOf(parameterValue.toLowerCase()), 1);
-    if (categoryArr.length) {
-      parameterValues[0] = categoryArr.join('|');
+    const valuesArr = parameterValues[0]?.split('|');
+    valuesArr?.splice(valuesArr.indexOf(parameterValue.toLowerCase()), 1);
+    if (valuesArr.length) {
+      parameterValues[0] = valuesArr.join('|');
       newUrl.searchParams.set(parameterName.toLowerCase(), parameterValues[0]);
     } else {
       newUrl.searchParams.delete(parameterName.toLowerCase());
