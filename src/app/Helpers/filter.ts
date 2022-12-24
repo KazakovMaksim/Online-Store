@@ -1,4 +1,4 @@
-import { ProductItem, Selector } from '../../types/interface';
+import { ProductItem, Selector } from '../types/interface';
 
 export function formCollection(sourceArr: ProductItem[], selector: Selector) {
   const collection: string[] = [];

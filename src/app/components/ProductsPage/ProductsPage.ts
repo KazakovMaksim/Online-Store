@@ -3,7 +3,7 @@ import { Card } from '../Card/card';
 import { products } from '../../data/products';
 import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
-import { countRange, formCollection } from '../Helpers/filter';
+import { countRange, formCollection } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
 import { ProductItem } from '../../types/interface';
 

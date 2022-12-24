@@ -1,5 +1,5 @@
 import { Component } from '../component';
-import { changeQueryParameterValues } from '../Helpers/filter';
+import { changeQueryParameterValues } from '../../helpers/filter';
 import './CheckboxFilter.scss';
 
 export class CheckboxFilter extends Component {
