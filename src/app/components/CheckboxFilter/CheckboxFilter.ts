@@ -4,8 +4,10 @@ import './CheckboxFilter.scss';
 
 export class CheckboxFilter extends Component {
   filterGroup = new Component(null, 'div', 'filter-group');
-  category: string[] = [];
-  brand: string[] = [];
+
+  category: string[] = new URL(window.location.href).searchParams.getAll('category');
+  brand: string[] = new URL(window.location.href).searchParams.getAll('brand');
+
   onCheckbox: (categoryQuery: string[], brandQuery: string[]) => void = () => console.log();
 
   constructor(categoryList: string[], listName: string) {
@@ -17,6 +19,10 @@ export class CheckboxFilter extends Component {
       const filterField = new Component(this.filterGroup.node, 'div', 'filter-field');
       const checkbox = new Component(null, 'input', 'checkbox_filter-check');
       checkbox.node.setAttribute('type', 'checkbox');
+      const filterValuesStr = `${this.category[0]}|${this.brand}`;
+      if (filterValuesStr.indexOf(catName) >= 0) {
+        checkbox.node.setAttribute('checked', '');
+      }
       const label = new Component(null, 'label', 'checkbox_filter-label', catName);
       filterField.node.append(checkbox.node, label.node);
       if (i >= 5) {

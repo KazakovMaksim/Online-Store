@@ -66,7 +66,6 @@ export class ProductsPage extends Component {
     cards.forEach((card) => {
       productList.append(card.node);
     });
-
     this.updateQtyDisplay();
   }
 
@@ -157,6 +156,8 @@ export class ProductsPage extends Component {
     this.sortOptions.node.addEventListener('change', fixLastItemsDisplay);
 
     this.loadCards();
+
+    this.useFilter(this.brandFilter.category, this.brandFilter.brand);
 
     this.updateQtyDisplay();
 
