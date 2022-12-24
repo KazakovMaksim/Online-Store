@@ -65,10 +65,16 @@ export class CheckboxFilter extends Component {
       newUrl.searchParams.set(parameterName.toLowerCase(), parameterValue);
     } else {
       if (parameterName.toLowerCase() === 'category') {
-        changeQueryParameterValues(parameterValue, parameterName, operation, this.category, newUrl);
+        changeQueryParameterValues(
+          parameterValue,
+          parameterName,
+          operation,
+          this.category[0],
+          newUrl,
+        );
       }
       if (parameterName.toLowerCase() === 'brand') {
-        changeQueryParameterValues(parameterValue, parameterName, operation, this.brand, newUrl);
+        changeQueryParameterValues(parameterValue, parameterName, operation, this.brand[0], newUrl);
       }
     }
     history.pushState(null, '', newUrl.href);

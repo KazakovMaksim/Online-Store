@@ -23,22 +23,22 @@ export function changeQueryParameterValues(
   parameterValue: string,
   parameterName: string,
   operation: string,
-  parameterValues: string[],
+  parameterValuesStr: string,
   newUrl: URL,
 ) {
   if (operation === 'del') {
-    const valuesArr = parameterValues[0]?.split('|');
-    valuesArr?.splice(valuesArr.indexOf(parameterValue.toLowerCase()), 1);
+    const valuesArr = parameterValuesStr?.split('|');
+    valuesArr?.splice(valuesArr.indexOf(parameterValue), 1);
     if (valuesArr.length) {
-      parameterValues[0] = valuesArr.join('|');
-      newUrl.searchParams.set(parameterName.toLowerCase(), parameterValues[0]);
+      parameterValuesStr = valuesArr.join('|');
+      newUrl.searchParams.set(parameterName.toLowerCase(), parameterValuesStr);
     } else {
       newUrl.searchParams.delete(parameterName.toLowerCase());
     }
   } else {
-    parameterValues[0] = parameterValues[0]
-      ? `${parameterValues[0]}|${parameterValue}`
+    parameterValuesStr = parameterValuesStr
+      ? `${parameterValuesStr}|${parameterValue}`
       : parameterValue;
-    newUrl.searchParams.set(parameterName.toLowerCase(), parameterValues[0]);
+    newUrl.searchParams.set(parameterName.toLowerCase(), parameterValuesStr);
   }
 }
