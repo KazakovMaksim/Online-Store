@@ -26,6 +26,9 @@ export class ProductsPage extends Component {
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
     this.productsFound.node.textContent = String(qty);
+    if (qty === 0) {
+      console.log('qty === 0');
+    }
   }
 
   useFilter(categoryQuery: string[], brandQuery: string[]) {
@@ -42,6 +45,10 @@ export class ProductsPage extends Component {
 
     this.filterCards = [...newCards];
     this.loadCards(this.filterCards);
+    const priceRange = countRange(this.filterCards, 'price');
+    const stockRange = countRange(this.filterCards, 'stock');
+    this.priceFilter.range.noUiSlider?.set(priceRange);
+    this.stockFilter.range.noUiSlider?.set(stockRange);
   }
 
   loadCards(cards = this.filterCards) {

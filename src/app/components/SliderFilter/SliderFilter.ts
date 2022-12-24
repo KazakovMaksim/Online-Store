@@ -5,6 +5,9 @@ import { target } from '../../../../node_modules/nouislider/dist/nouislider';
 import './SliderFilter.scss';
 
 export class SliderFilter extends Component {
+  rangeContainer: Component;
+  range: target;
+
   constructor(listName: string, filterRange: number[]) {
     super(null, 'div', 'filter');
     const [min, max] = filterRange;
@@ -13,8 +16,8 @@ export class SliderFilter extends Component {
     const filterFrom = new Component(filterInfo.node, 'div', 'filter-from', `${min}`);
     const filterTo = new Component(filterInfo.node, 'div', 'filter-to', `${max}`);
 
-    const rangeContainer = new Component(this.node, 'div', 'range-container');
-    noUiSlider.create(rangeContainer.node, {
+    this.rangeContainer = new Component(this.node, 'div', 'range-container');
+    noUiSlider.create(this.rangeContainer.node, {
       start: [min, max],
       connect: true,
       range: {
@@ -23,9 +26,9 @@ export class SliderFilter extends Component {
       },
     });
 
-    const range = rangeContainer.node as target;
-    range.noUiSlider?.on('update', () => {
-      const [valueLeft, valueRight] = [range.noUiSlider?.get(true)].toString().split(',');
+    this.range = this.rangeContainer.node as target;
+    this.range.noUiSlider?.on('update', () => {
+      const [valueLeft, valueRight] = [this.range.noUiSlider?.get(true)].toString().split(',');
 
       filterTo.node.innerText = Math.floor(+valueRight).toString();
       filterFrom.node.innerText = Math.floor(+valueLeft).toString();

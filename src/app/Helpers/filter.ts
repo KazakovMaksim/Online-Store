@@ -1,3 +1,4 @@
+import { Card } from '../components/Card/card';
 import { ProductItem, Selector } from '../types/interface';
 
 export function formCollection(sourceArr: ProductItem[], selector: Selector) {
@@ -10,9 +11,9 @@ export function formCollection(sourceArr: ProductItem[], selector: Selector) {
   return collection;
 }
 
-export function countRange(sourceArr: ProductItem[], selector: 'price' | 'stock') {
+export function countRange(sourceArr: ProductItem[] | Card[], selector: 'price' | 'stock') {
   const collection = sourceArr
-    .map((product: ProductItem) => product[selector])
+    .map((product: ProductItem | Card) => product[selector])
     .sort((a, b) => a - b);
   const min = collection[0];
   const max = Math.max.apply(null, collection);
