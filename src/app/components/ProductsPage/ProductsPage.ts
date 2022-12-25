@@ -47,8 +47,8 @@ export class ProductsPage extends Component {
     this.loadCards(this.filterCards);
     const priceRange = countRange(this.filterCards, 'price');
     const stockRange = countRange(this.filterCards, 'stock');
-    this.priceFilter.range.noUiSlider?.set(priceRange);
-    this.stockFilter.range.noUiSlider?.set(stockRange);
+    this.priceFilter.rangeSlider.noUiSlider?.set(priceRange);
+    this.stockFilter.rangeSlider.noUiSlider?.set(stockRange);
   }
 
   loadCards(cards = this.filterCards) {
@@ -92,6 +92,10 @@ export class ProductsPage extends Component {
       this.useFilter(categoryQuery, brandQuery);
 
     this.priceFilter = new SliderFilter('Price', priceRange);
+    this.priceFilter.onSlider = (min, max) => {
+      console.log();
+    };
+
     this.stockFilter = new SliderFilter('Stock', stockRange);
     this.controlsContainer.node.append(
       this.categoryFilter.node,

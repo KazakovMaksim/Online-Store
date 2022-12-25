@@ -36,10 +36,13 @@ export function changeQueryParameterValues(
     } else {
       newUrl.searchParams.delete(parameterName.toLowerCase());
     }
-  } else {
+  } else if (operation === 'add') {
     parameterValuesStr = parameterValuesStr
       ? `${parameterValuesStr}|${parameterValue}`
       : parameterValue;
+    newUrl.searchParams.set(parameterName.toLowerCase(), parameterValuesStr);
+  } else {
+    parameterValuesStr = parameterValue;
     newUrl.searchParams.set(parameterName.toLowerCase(), parameterValuesStr);
   }
 }
