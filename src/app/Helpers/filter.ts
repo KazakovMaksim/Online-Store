@@ -28,16 +28,16 @@ export function changeQueryParameterValues(
   newUrl: URL,
 ) {
   if (operation === 'del') {
-    const valuesArr = paramValuesStr?.split('|');
+    const valuesArr = paramValuesStr?.split('↕');
     valuesArr?.splice(valuesArr.indexOf(paramValue), 1);
     if (valuesArr.length) {
-      paramValuesStr = valuesArr.join('|');
+      paramValuesStr = valuesArr.join('↕');
       newUrl.searchParams.set(paramName.toLowerCase(), paramValuesStr);
     } else {
       newUrl.searchParams.delete(paramName.toLowerCase());
     }
   } else if (operation === 'add') {
-    paramValuesStr = paramValuesStr ? `${paramValuesStr}|${paramValue}` : paramValue;
+    paramValuesStr = paramValuesStr ? `${paramValuesStr}↕${paramValue}` : paramValue;
     newUrl.searchParams.set(paramName.toLowerCase(), paramValuesStr);
   } else {
     paramValuesStr = paramValue;

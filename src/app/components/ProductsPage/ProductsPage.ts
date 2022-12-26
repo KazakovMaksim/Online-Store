@@ -32,8 +32,8 @@ export class ProductsPage extends Component {
     categoryQuery = this.categoryFilter.queryParamsStr,
     brandQuery = this.brandFilter.queryParamsStr,
   ) {
-    const categoryArr = categoryQuery ? categoryQuery.split('|') : [];
-    const brandArr = brandQuery ? brandQuery.split('|') : [];
+    const categoryArr = categoryQuery ? categoryQuery.split('↕') : [];
+    const brandArr = brandQuery ? brandQuery.split('↕') : [];
 
     let newCards: Card[] = this.allCards;
 

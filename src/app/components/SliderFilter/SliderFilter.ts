@@ -17,8 +17,8 @@ export class SliderFilter extends Component {
     super(null, 'div', 'filter');
 
     this.paramsList = new URL(window.location.href).searchParams.getAll(filterListName)[0];
-    const leftVal = this.paramsList ? this.paramsList.split('|')[0] : filterRange[0];
-    const rightVal = this.paramsList ? this.paramsList.split('|')[1] : filterRange[1];
+    const leftVal = this.paramsList ? this.paramsList.split('↕')[0] : filterRange[0];
+    const rightVal = this.paramsList ? this.paramsList.split('↕')[1] : filterRange[1];
     this.sliderValues = [leftVal, rightVal];
 
     const [min, max] = filterRange;
@@ -49,7 +49,7 @@ export class SliderFilter extends Component {
     });
 
     this.slider.noUiSlider?.on('change', () => {
-      this.updateQueryInURL(this.sliderValues.join('|'), filterListName);
+      this.updateQueryInURL(this.sliderValues.join('↕'), filterListName);
       this.paramsList = new URL(window.location.href).searchParams.getAll(filterListName)[0];
       this.onSlider();
     });
