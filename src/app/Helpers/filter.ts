@@ -17,32 +17,30 @@ export function countRange(sourceArr: ProductItem[] | Card[], selector: 'price' 
     .sort((a, b) => a - b);
   const min = collection[0];
   const max = Math.max.apply(null, collection);
-  return [min, max];
+  return [String(min), String(max)];
 }
 
 export function changeQueryParameterValues(
-  parameterValue: string,
-  parameterName: string,
+  paramValue: string,
+  paramName: string,
   operation: string,
-  parameterValuesStr: string,
+  paramValuesStr: string,
   newUrl: URL,
 ) {
   if (operation === 'del') {
-    const valuesArr = parameterValuesStr?.split('|');
-    valuesArr?.splice(valuesArr.indexOf(parameterValue), 1);
+    const valuesArr = paramValuesStr?.split('|');
+    valuesArr?.splice(valuesArr.indexOf(paramValue), 1);
     if (valuesArr.length) {
-      parameterValuesStr = valuesArr.join('|');
-      newUrl.searchParams.set(parameterName.toLowerCase(), parameterValuesStr);
+      paramValuesStr = valuesArr.join('|');
+      newUrl.searchParams.set(paramName.toLowerCase(), paramValuesStr);
     } else {
-      newUrl.searchParams.delete(parameterName.toLowerCase());
+      newUrl.searchParams.delete(paramName.toLowerCase());
     }
   } else if (operation === 'add') {
-    parameterValuesStr = parameterValuesStr
-      ? `${parameterValuesStr}|${parameterValue}`
-      : parameterValue;
-    newUrl.searchParams.set(parameterName.toLowerCase(), parameterValuesStr);
+    paramValuesStr = paramValuesStr ? `${paramValuesStr}|${paramValue}` : paramValue;
+    newUrl.searchParams.set(paramName.toLowerCase(), paramValuesStr);
   } else {
-    parameterValuesStr = parameterValue;
-    newUrl.searchParams.set(parameterName.toLowerCase(), parameterValuesStr);
+    paramValuesStr = paramValue;
+    newUrl.searchParams.set(paramName.toLowerCase(), paramValuesStr);
   }
 }

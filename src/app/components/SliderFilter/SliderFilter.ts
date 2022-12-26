@@ -7,63 +7,62 @@ import { changeQueryParameterValues } from '../../helpers/filter';
 
 export class SliderFilter extends Component {
   rangeContainer: Component;
-  rangeSlider: target;
-  range: number[];
-  price = new URL(window.location.href).searchParams.getAll('price');
-  stock = new URL(window.location.href).searchParams.getAll('stock');
+  slider: target;
+  sliderValues: string[];
+  paramsList: string;
 
-  onSlider: (min: string, max: string) => void = () => console.log();
+  onSlider: () => void = () => console.log();
 
-  constructor(listName: string, filterRange: number[]) {
+  constructor(filterListName: string, filterRange: string[]) {
     super(null, 'div', 'filter');
-    this.range = filterRange;
+
+    this.paramsList = new URL(window.location.href).searchParams.getAll(filterListName)[0];
+    const leftVal = this.paramsList ? this.paramsList.split('|')[0] : filterRange[0];
+    const rightVal = this.paramsList ? this.paramsList.split('|')[1] : filterRange[1];
+    this.sliderValues = [leftVal, rightVal];
+
     const [min, max] = filterRange;
-    new Component(this.node, 'p', 'filter-title', listName);
+    new Component(this.node, 'p', 'filter-title', filterListName);
     const filterInfo = new Component(this.node, 'div', 'filter-info');
-    const filterFrom = new Component(filterInfo.node, 'div', 'filter-from', `${min}`);
-    const filterTo = new Component(filterInfo.node, 'div', 'filter-to', `${max}`);
+    const filterFrom = new Component(filterInfo.node, 'div', 'filter-from', min);
+    const filterTo = new Component(filterInfo.node, 'div', 'filter-to', max);
 
     this.rangeContainer = new Component(this.node, 'div', 'range-container');
     noUiSlider.create(this.rangeContainer.node, {
-      start: [min, max],
+      start: [leftVal, rightVal],
       connect: true,
       range: {
-        min: min,
-        max: max,
+        min: +min,
+        max: +max,
       },
     });
 
-    this.rangeSlider = this.rangeContainer.node as target;
-    this.rangeSlider.noUiSlider?.on('update', () => {
-      const [valueLeft, valueRight] = [this.rangeSlider.noUiSlider?.get(true)]
+    this.slider = this.rangeContainer.node as target;
+    this.slider.noUiSlider?.on('update', () => {
+      const [leftVal, rightVal] = [this.slider.noUiSlider?.get(true)]
         .toString()
-        .split(',');
-      this.range = [Math.floor(+valueLeft), Math.floor(+valueRight)];
-      filterTo.node.innerText = Math.floor(+valueRight).toString();
-      filterFrom.node.innerText = Math.floor(+valueLeft).toString();
-      this.onSlider(filterFrom.node.innerText, filterTo.node.innerText);
+        .split(',')
+        .map((el) => Math.floor(+el).toString());
+      this.sliderValues = [leftVal, rightVal];
+      filterFrom.node.innerText = leftVal;
+      filterTo.node.innerText = rightVal;
     });
 
-    this.rangeSlider.noUiSlider?.on('change', () => {
-      this.updateQueryInURL(this.range.join('|'), listName);
+    this.slider.noUiSlider?.on('change', () => {
+      this.updateQueryInURL(this.sliderValues.join('|'), filterListName);
+      this.paramsList = new URL(window.location.href).searchParams.getAll(filterListName)[0];
+      this.onSlider();
     });
   }
 
-  updateQueryInURL(parameterValue: string, parameterName: string) {
+  updateQueryInURL(paramValue: string, paramName: string) {
     const newUrl = new URL(window.location.href);
 
-    if (window.location.href.indexOf('?') < 0) {
-      newUrl.searchParams.set(parameterName.toLowerCase(), parameterValue);
+    if (newUrl.href.indexOf('?') < 0) {
+      newUrl.searchParams.set(paramName, paramValue);
     } else {
-      if (parameterName.toLowerCase() === 'price' && this.price) {
-        changeQueryParameterValues(parameterValue, parameterName, 'update', this.price[0], newUrl);
-      }
-      if (parameterName.toLowerCase() === 'stock' && this.stock) {
-        changeQueryParameterValues(parameterValue, parameterName, 'update', this.stock[0], newUrl);
-      }
+      changeQueryParameterValues(paramValue, paramName, 'update', this.paramsList, newUrl);
     }
     history.pushState(null, '', newUrl.href);
-    this.price = newUrl.searchParams.getAll('price');
-    this.stock = newUrl.searchParams.getAll('stock');
   }
 }

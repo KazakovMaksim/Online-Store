@@ -26,29 +26,34 @@ export class ProductsPage extends Component {
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
     this.productsFound.node.textContent = String(qty);
-    if (qty === 0) {
-      console.log('qty === 0');
-    }
   }
 
-  useFilter(categoryQuery: string[], brandQuery: string[]) {
-    const categoryArr = categoryQuery.join('|').split('|');
-    const brandArr = brandQuery.join('|').split('|');
+  useFilters(
+    categoryQuery = this.categoryFilter.queryParamsStr,
+    brandQuery = this.brandFilter.queryParamsStr,
+  ) {
+    const categoryArr = categoryQuery ? categoryQuery.split('|') : [];
+    const brandArr = brandQuery ? brandQuery.split('|') : [];
+
     let newCards: Card[] = this.allCards;
 
-    if (categoryQuery.length) {
+    if (categoryQuery) {
       newCards = newCards.filter((card) => categoryArr.indexOf(card.category) >= 0);
     }
-    if (brandQuery.length) {
+    if (brandQuery) {
       newCards = newCards.filter((card) => brandArr.indexOf(card.brand) >= 0);
+    }
+    if (this.priceFilter.paramsList) {
+      const [leftVal, rightVal] = this.priceFilter.sliderValues;
+      newCards = newCards.filter((card) => card.price >= +leftVal && card.price <= +rightVal);
+    }
+    if (this.stockFilter.paramsList) {
+      const [leftVal, rightVal] = this.stockFilter.sliderValues;
+      newCards = newCards.filter((card) => card.stock >= +leftVal && card.stock <= +rightVal);
     }
 
     this.filterCards = [...newCards];
     this.loadCards(this.filterCards);
-    const priceRange = countRange(this.filterCards, 'price');
-    const stockRange = countRange(this.filterCards, 'stock');
-    this.priceFilter.rangeSlider.noUiSlider?.set(priceRange);
-    this.stockFilter.rangeSlider.noUiSlider?.set(stockRange);
   }
 
   loadCards(cards = this.filterCards) {
@@ -67,7 +72,6 @@ export class ProductsPage extends Component {
       if (sortIndex === 4) {
         cards.sort((a: Card, b: Card) => b.rating - a.rating);
       }
-      console.log(sortIndex);
     }
     productList.textContent = '';
     cards.forEach((card) => {
@@ -83,20 +87,22 @@ export class ProductsPage extends Component {
     const priceRange = countRange(products.products, 'price');
     const stockRange = countRange(products.products, 'stock');
 
-    this.categoryFilter = new CheckboxFilter(this.categoryList, 'Category');
-    this.categoryFilter.onCheckbox = (categoryQuery, brandQuery) =>
-      this.useFilter(categoryQuery, brandQuery);
+    this.categoryFilter = new CheckboxFilter(this.categoryList, 'category');
+    this.categoryFilter.onCheckbox = () => this.useFilters();
 
-    this.brandFilter = new CheckboxFilter(this.brandList, 'Brand');
-    this.brandFilter.onCheckbox = (categoryQuery, brandQuery) =>
-      this.useFilter(categoryQuery, brandQuery);
+    this.brandFilter = new CheckboxFilter(this.brandList, 'brand');
+    this.brandFilter.onCheckbox = () => this.useFilters();
 
-    this.priceFilter = new SliderFilter('Price', priceRange);
-    this.priceFilter.onSlider = (min, max) => {
-      console.log();
+    this.priceFilter = new SliderFilter('price', priceRange);
+    this.priceFilter.onSlider = () => {
+      this.useFilters();
     };
 
-    this.stockFilter = new SliderFilter('Stock', stockRange);
+    this.stockFilter = new SliderFilter('stock', stockRange);
+    this.stockFilter.onSlider = () => {
+      this.useFilters();
+    };
+
     this.controlsContainer.node.append(
       this.categoryFilter.node,
       this.brandFilter.node,
@@ -149,7 +155,6 @@ export class ProductsPage extends Component {
         button.classList.remove('active');
       }
       currentBtn.classList.add('active');
-      console.log(currentBtn.classList);
       if (currentBtn.classList.contains('btn-row-display'))
         productList.node.classList.add('row-display');
       else productList.node.classList.remove('row-display');
@@ -166,9 +171,7 @@ export class ProductsPage extends Component {
     this.sortOptions.node.addEventListener('change', () => this.loadCards());
     this.sortOptions.node.addEventListener('change', fixLastItemsDisplay);
 
-    this.loadCards();
-
-    this.useFilter(this.brandFilter.category, this.brandFilter.brand);
+    this.useFilters();
 
     this.updateQtyDisplay();
 
