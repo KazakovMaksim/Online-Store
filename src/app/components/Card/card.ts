@@ -1,4 +1,4 @@
-import { ProductItem } from '../../types/interface';
+import { Product } from '../../types/interface';
 import { Component } from '../component';
 import './card.scss';
 
@@ -16,7 +16,7 @@ export class Card extends Component {
   category: string;
   images: string[];
 
-  constructor(parentNode: HTMLElement | null, product: ProductItem) {
+  constructor(parentNode: HTMLElement | null, product: Product) {
     // visible card's pieces
     super(parentNode, 'div', 'prodcut-card');
     this.mainImage.style.backgroundImage = `url(${product.thumbnail})`;

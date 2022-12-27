@@ -5,23 +5,9 @@ export interface IRoute {
   component: (id?: number) => Component;
 }
 
-export interface product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
-}
-
 export type Selector = 'category' | 'brand';
 
-export interface ProductItem {
+export interface Product {
   id: number;
   title: string;
   description: string;
@@ -35,4 +21,4 @@ export interface ProductItem {
   images: string[];
 }
 
-export type ProductItemKeys = keyof ProductItem;
+export type ProductKeys = keyof Product;

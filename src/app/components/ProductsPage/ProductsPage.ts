@@ -5,7 +5,7 @@ import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
 import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
-import { ProductItem } from '../../types/interface';
+import { Product } from '../../types/interface';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
@@ -171,7 +171,7 @@ export class ProductsPage extends Component {
       button.addEventListener('click', changeItemsDisplay);
     }
 
-    products.products.forEach((product: ProductItem) =>
+    products.products.forEach((product: Product) =>
       this.allCards.push(new Card(this.productList.node, product)),
     );
 
