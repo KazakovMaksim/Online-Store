@@ -3,7 +3,7 @@ import { Card } from '../Card/card';
 import { products } from '../../data/products';
 import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
-import { countRange, formCollection } from '../../helpers/filter';
+import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
 import { ProductItem } from '../../types/interface';
 
@@ -58,7 +58,11 @@ export class ProductsPage extends Component {
 
   loadCards(cards = this.filterCards) {
     const productList = this.productList.node;
-    const sortIndex = (this.sortOptions.node as HTMLSelectElement).selectedIndex;
+    const paramsListStr = new URL(window.location.href).searchParams.getAll('sort')[0];
+    const sortIndex = paramsListStr
+      ? +paramsListStr
+      : (this.sortOptions.node as HTMLSelectElement).selectedIndex;
+
     if (sortIndex > 0) {
       if (sortIndex === 1) {
         cards.sort((a: Card, b: Card) => a.price - b.price);
@@ -117,6 +121,7 @@ export class ProductsPage extends Component {
 
     // settings list components
     this.sortOptions = new Component(listSettings.node, 'select', 'sort-options');
+
     const sortLable = new Component(this.sortOptions.node, 'option', 'sort-lable', 'Sort options:')
       .node as HTMLOptionElement;
 
@@ -129,6 +134,8 @@ export class ProductsPage extends Component {
           .node as HTMLOptionElement
       ).value = sort;
     });
+    const paramsListStr = new URL(window.location.href).searchParams.getAll('sort')[0];
+    (this.sortOptions.node as HTMLSelectElement).selectedIndex = paramsListStr ? +paramsListStr : 0;
 
     // product found lable
     const productFoundLable = new Component(listSettings.node, 'p', 'product-found-lable');
@@ -168,6 +175,11 @@ export class ProductsPage extends Component {
       this.allCards.push(new Card(this.productList.node, product)),
     );
 
+    this.sortOptions.node.addEventListener('change', () => {
+      const index = (this.sortOptions.node as HTMLSelectElement).selectedIndex;
+      const paramsList = new URL(window.location.href).searchParams.getAll('sort')[0];
+      updateQueryInURL(String(index), 'sort', paramsList);
+    });
     this.sortOptions.node.addEventListener('change', () => this.loadCards());
     this.sortOptions.node.addEventListener('change', fixLastItemsDisplay);
 

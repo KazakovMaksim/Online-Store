@@ -3,7 +3,7 @@ import noUiSlider from '../../../../node_modules/nouislider/dist/nouislider';
 import '../../../../node_modules/nouislider/dist/nouislider.css';
 import { target } from '../../../../node_modules/nouislider/dist/nouislider';
 import './SliderFilter.scss';
-import { changeQueryParameterValues } from '../../helpers/filter';
+import { updateQueryInURL } from '../../helpers/filter';
 
 export class SliderFilter extends Component {
   rangeContainer: Component;
@@ -49,20 +49,9 @@ export class SliderFilter extends Component {
     });
 
     this.slider.noUiSlider?.on('change', () => {
-      this.updateQueryInURL(this.sliderValues.join('↕'), filterListName);
+      updateQueryInURL(this.sliderValues.join('↕'), filterListName, this.paramsList);
       this.paramsList = new URL(window.location.href).searchParams.getAll(filterListName)[0];
       this.onSlider();
     });
-  }
-
-  updateQueryInURL(paramValue: string, paramName: string) {
-    const newUrl = new URL(window.location.href);
-
-    if (newUrl.href.indexOf('?') < 0) {
-      newUrl.searchParams.set(paramName, paramValue);
-    } else {
-      changeQueryParameterValues(paramValue, paramName, 'update', this.paramsList, newUrl);
-    }
-    history.pushState(null, '', newUrl.href);
   }
 }

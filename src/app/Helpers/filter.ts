@@ -44,3 +44,14 @@ export function changeQueryParameterValues(
     newUrl.searchParams.set(paramName.toLowerCase(), paramValuesStr);
   }
 }
+
+export function updateQueryInURL(paramValue: string, paramName: string, paramsListStr: string) {
+  const newUrl = new URL(window.location.href);
+
+  if (newUrl.href.indexOf('?') < 0) {
+    newUrl.searchParams.set(paramName, paramValue);
+  } else {
+    changeQueryParameterValues(paramValue, paramName, 'update', paramsListStr, newUrl);
+  }
+  history.pushState(null, '', newUrl.href);
+}
