@@ -21,7 +21,6 @@ export class Card extends Component {
     super(parentNode, 'div', 'prodcut-card');
     this.mainImage.style.backgroundImage = `url(${product.thumbnail})`;
     this.title.textContent = product.title;
-    const maxStarsWidth = 82.6667;
     new Component(
       this.descriptionContainer,
       'div',
@@ -35,6 +34,8 @@ export class Card extends Component {
     );
     new Component(priceAddContainer.node, 'div', 'product-price', `€${product.price}`).node;
     this.price = product.price;
+    const btnDetails = new Component(priceAddContainer.node, 'button', 'btn btn-details', 'Details')
+      .node;
     const btnAdd = new Component(
       priceAddContainer.node,
       'button',
@@ -57,5 +58,10 @@ export class Card extends Component {
     this.category = product.category;
     this.stock = product.stock;
     this.images = product.images;
+
+    // buttons handlers
+    btnDetails.addEventListener('click', () => {
+      window.location.hash = `product-details/${this.id}`;
+    });
   }
 }
