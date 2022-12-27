@@ -1,7 +1,11 @@
 import { Component } from '../component';
 import { Card } from '../Card/card';
 import { products } from '../../data/products';
+import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
+import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
+import { SliderFilter } from '../SliderFilter/SliderFilter';
+import { Product } from '../../types/interface';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
@@ -9,17 +13,56 @@ export class ProductsPage extends Component {
   productList: Component;
   productsFound: Component;
   sortOptions: Component;
+  categoryList: string[] = formCollection(products.products, 'category');
+  brandList: string[] = formCollection(products.products, 'brand');
   allCards: Card[] = [];
+  filterCards: Card[] = this.allCards;
+
+  categoryFilter: CheckboxFilter;
+  brandFilter: CheckboxFilter;
+  priceFilter: SliderFilter;
+  stockFilter: SliderFilter;
 
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
     this.productsFound.node.textContent = String(qty);
   }
 
-  loadCards() {
-    const cards = this.allCards;
+  useFilters(
+    categoryQuery = this.categoryFilter.queryParamsStr,
+    brandQuery = this.brandFilter.queryParamsStr,
+  ) {
+    const categoryArr = categoryQuery ? categoryQuery.split('↕') : [];
+    const brandArr = brandQuery ? brandQuery.split('↕') : [];
+
+    let newCards: Card[] = this.allCards;
+
+    if (categoryQuery) {
+      newCards = newCards.filter((card) => categoryArr.indexOf(card.category) >= 0);
+    }
+    if (brandQuery) {
+      newCards = newCards.filter((card) => brandArr.indexOf(card.brand) >= 0);
+    }
+    if (this.priceFilter.paramsList) {
+      const [leftVal, rightVal] = this.priceFilter.sliderValues;
+      newCards = newCards.filter((card) => card.price >= +leftVal && card.price <= +rightVal);
+    }
+    if (this.stockFilter.paramsList) {
+      const [leftVal, rightVal] = this.stockFilter.sliderValues;
+      newCards = newCards.filter((card) => card.stock >= +leftVal && card.stock <= +rightVal);
+    }
+
+    this.filterCards = [...newCards];
+    this.loadCards(this.filterCards);
+  }
+
+  loadCards(cards = this.filterCards) {
     const productList = this.productList.node;
-    const sortIndex = (this.sortOptions.node as HTMLSelectElement).selectedIndex;
+    const paramsListStr = new URL(window.location.href).searchParams.getAll('sort')[0];
+    const sortIndex = paramsListStr
+      ? +paramsListStr
+      : (this.sortOptions.node as HTMLSelectElement).selectedIndex;
+
     if (sortIndex > 0) {
       if (sortIndex === 1) {
         cards.sort((a: Card, b: Card) => a.price - b.price);
@@ -33,24 +76,43 @@ export class ProductsPage extends Component {
       if (sortIndex === 4) {
         cards.sort((a: Card, b: Card) => b.rating - a.rating);
       }
-      console.log(sortIndex);
-      productList.textContent = '';
-      cards.forEach((card) => {
-        productList.append(card.node);
-      });
     }
+    productList.textContent = '';
+    cards.forEach((card) => {
+      productList.append(card.node);
+    });
+    this.updateQtyDisplay();
   }
 
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
 
-    // products.forEach((el) => {
-    //   const card = new Card(null);
-    //   card.productName.innerText = el.name;
-    //   card.productSize.node.innerText = el.size;
-    //   card.productShape.node.innerText = el.shape;
-    //   this.productsContainer.node.append(card.node);
-    // });
+    // implement filters block
+    const priceRange = countRange(products.products, 'price');
+    const stockRange = countRange(products.products, 'stock');
+
+    this.categoryFilter = new CheckboxFilter(this.categoryList, 'category');
+    this.categoryFilter.onCheckbox = () => this.useFilters();
+
+    this.brandFilter = new CheckboxFilter(this.brandList, 'brand');
+    this.brandFilter.onCheckbox = () => this.useFilters();
+
+    this.priceFilter = new SliderFilter('price', priceRange);
+    this.priceFilter.onSlider = () => {
+      this.useFilters();
+    };
+
+    this.stockFilter = new SliderFilter('stock', stockRange);
+    this.stockFilter.onSlider = () => {
+      this.useFilters();
+    };
+
+    this.controlsContainer.node.append(
+      this.categoryFilter.node,
+      this.brandFilter.node,
+      this.priceFilter.node,
+      this.stockFilter.node,
+    );
 
     // two main blocks in product-container
     const listSettings = new Component(this.productsContainer.node, 'article', 'list-settings');
@@ -59,29 +121,21 @@ export class ProductsPage extends Component {
 
     // settings list components
     this.sortOptions = new Component(listSettings.node, 'select', 'sort-options');
+
     const sortLable = new Component(this.sortOptions.node, 'option', 'sort-lable', 'Sort options:')
       .node as HTMLOptionElement;
 
     sortLable.selected = true;
     sortLable.disabled = true;
 
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by price ASC')
-        .node as HTMLOptionElement
-    ).value = 'price-ASC';
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by price DESC')
-        .node as HTMLOptionElement
-    ).value = 'price-DESC';
-
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by rating ASC')
-        .node as HTMLOptionElement
-    ).value = 'rating-ASC';
-    (
-      new Component(this.sortOptions.node, 'option', 'sort-item', 'Sort by rating DESC')
-        .node as HTMLOptionElement
-    ).value = 'rating-DESC';
+    ['price ASC', 'price DESC', 'rating ASC', 'rating DESC'].forEach((sort) => {
+      (
+        new Component(this.sortOptions.node, 'option', 'sort-item', `Sort by ${sort}`)
+          .node as HTMLOptionElement
+      ).value = sort;
+    });
+    const paramsListStr = new URL(window.location.href).searchParams.getAll('sort')[0];
+    (this.sortOptions.node as HTMLSelectElement).selectedIndex = paramsListStr ? +paramsListStr : 0;
 
     // product found lable
     const productFoundLable = new Component(listSettings.node, 'p', 'product-found-lable');
@@ -108,7 +162,6 @@ export class ProductsPage extends Component {
         button.classList.remove('active');
       }
       currentBtn.classList.add('active');
-      console.log(currentBtn.classList);
       if (currentBtn.classList.contains('btn-row-display'))
         productList.node.classList.add('row-display');
       else productList.node.classList.remove('row-display');
@@ -118,29 +171,19 @@ export class ProductsPage extends Component {
       button.addEventListener('click', changeItemsDisplay);
     }
 
-    products.products.forEach((el) =>
-      this.allCards.push(
-        new Card(
-          this.productList.node,
-          el.id,
-          el.title,
-          el.description,
-          el.price,
-          el.discountPercentage,
-          el.rating,
-          el.stock,
-          el.brand,
-          el.category,
-          el.thumbnail,
-          el.images,
-        ),
-      ),
+    products.products.forEach((product: Product) =>
+      this.allCards.push(new Card(this.productList.node, product)),
     );
 
-    this.sortOptions.node.addEventListener('change', this.loadCards.bind(this));
+    this.sortOptions.node.addEventListener('change', () => {
+      const index = (this.sortOptions.node as HTMLSelectElement).selectedIndex;
+      const paramsList = new URL(window.location.href).searchParams.getAll('sort')[0];
+      updateQueryInURL(String(index), 'sort', paramsList);
+    });
+    this.sortOptions.node.addEventListener('change', () => this.loadCards());
     this.sortOptions.node.addEventListener('change', fixLastItemsDisplay);
 
-    this.loadCards();
+    this.useFilters();
 
     this.updateQtyDisplay();
 

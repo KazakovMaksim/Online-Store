@@ -5,12 +5,14 @@ export interface IRoute {
   component: (id?: number) => Component;
 }
 
-export interface product {
+export type Selector = 'category' | 'brand';
+
+export interface Product {
   id: number;
   title: string;
   description: string;
   price: number;
-  discountPercentage: number;
+  discount: number;
   rating: number;
   stock: number;
   brand: string;
@@ -18,3 +20,5 @@ export interface product {
   thumbnail: string;
   images: string[];
 }
+
+export type ProductKeys = keyof Product;

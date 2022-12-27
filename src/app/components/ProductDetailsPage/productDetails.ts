@@ -1,14 +1,14 @@
 import { products } from '../../data/products';
-import { product } from '../../types/interface';
+import { Product } from '../../types/interface';
 import { Component } from '../component';
 import './productDetails.scss';
 
 export class ProductDetailsPage extends Component {
   constructor(parentNode: HTMLElement | null, productId?: number) {
     super(parentNode, 'div', 'product-details-page wrapper');
-    const selectedProduct: product = products.products.find(
+    const selectedProduct: Product = products.products.find(
       (product) => product.id === productId,
-    ) as product;
+    ) as Product;
 
     // primary blocks
     const breadCrumbsBlock = new Component(
@@ -50,7 +50,7 @@ export class ProductDetailsPage extends Component {
       const titleRow = new Component(detailsBlock.node, 'div', `${key}-row detail-row`);
       let keyToInsert = key;
       let valueToInsert = value;
-      if (String(key) === 'discountPercentage') keyToInsert = 'discount Percentage';
+      if (String(key) === 'discount') keyToInsert = 'discount %';
       if (String(key) === 'price') valueToInsert = `€${value}`;
       new Component(titleRow.node, 'p', 'head-line', `${keyToInsert}`);
       new Component(titleRow.node, 'p', 'desc-item', `${valueToInsert}`);
