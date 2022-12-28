@@ -5,6 +5,7 @@ import './CheckboxFilter.scss';
 export class CheckboxFilter extends Component {
   filterGroup = new Component(null, 'div', 'filter-group');
   queryParamsStr: string;
+  filterCheckboxes: Component[] = [];
 
   onCheckbox: () => void = () => console.log();
 
@@ -19,9 +20,10 @@ export class CheckboxFilter extends Component {
       const filterField = new Component(this.filterGroup.node, 'div', 'filter-field');
 
       const checkbox = new Component(null, 'input', 'checkbox_filter-check');
+      this.filterCheckboxes.push(checkbox);
       checkbox.node.setAttribute('type', 'checkbox');
       if (this.queryParamsStr && this.queryParamsStr.indexOf(group) >= 0) {
-        checkbox.node.setAttribute('checked', '');
+        (checkbox.node as HTMLInputElement).checked = true;
       }
 
       const label = new Component(null, 'label', 'checkbox_filter-label', group);

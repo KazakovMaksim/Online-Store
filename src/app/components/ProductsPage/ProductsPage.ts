@@ -35,7 +35,7 @@ export class ProductsPage extends Component {
     const categoryArr = categoryQuery ? categoryQuery.split('↕') : [];
     const brandArr = brandQuery ? brandQuery.split('↕') : [];
 
-    let newCards: Card[] = this.allCards;
+    let newCards: Card[] = [...this.allCards];
 
     if (categoryQuery) {
       newCards = newCards.filter((card) => categoryArr.indexOf(card.category) >= 0);
@@ -93,10 +93,7 @@ export class ProductsPage extends Component {
     const maxRangePrice = countRange(this.allCards, 'price');
     const maxRangeStock = countRange(this.allCards, 'stock');
     if (rangePrice.join('') !== '') {
-      this.priceFilter.slider.noUiSlider?.set(rangePrice);
-      this.priceFilter.fillBoxValues(rangePrice);
-      this.stockFilter.slider.noUiSlider?.set(rangeStock);
-      this.stockFilter.fillBoxValues(rangeStock);
+      this.changeSliderFilterVal(rangePrice, rangeStock);
     } else {
       this.priceFilter.slider.noUiSlider?.set(maxRangePrice);
       this.priceFilter.fillBoxValues(['-', '-']);
@@ -105,8 +102,28 @@ export class ProductsPage extends Component {
     }
   }
 
+  changeSliderFilterVal(rangePrice: string[], rangeStock: string[]) {
+    this.priceFilter.slider.noUiSlider?.set(rangePrice);
+    this.priceFilter.fillBoxValues(rangePrice);
+    this.stockFilter.slider.noUiSlider?.set(rangeStock);
+    this.stockFilter.fillBoxValues(rangeStock);
+  }
+
   resetFilters = () => {
-    console.log('RESET FILTERS');
+    this.brandFilter.filterCheckboxes.forEach(
+      (checkbox) => ((checkbox.node as HTMLInputElement).checked = false),
+    );
+    this.categoryFilter.filterCheckboxes.forEach(
+      (checkbox) => ((checkbox.node as HTMLInputElement).checked = false),
+    );
+    this.filterCards = [...this.allCards];
+    const newUrl = new URL(window.location.href);
+    history.pushState(null, '', `${newUrl.origin}/${newUrl.hash}`);
+    (this.sortOptions.node as HTMLSelectElement).selectedIndex = 0;
+    this.loadCards();
+    const rangePrice = countRange(this.filterCards, 'price');
+    const rangeStock = countRange(this.filterCards, 'stock');
+    this.changeSliderFilterVal(rangePrice, rangeStock);
   };
 
   constructor(parentNode: HTMLElement | null) {
