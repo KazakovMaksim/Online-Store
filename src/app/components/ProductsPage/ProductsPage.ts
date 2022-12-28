@@ -32,6 +32,7 @@ export class ProductsPage extends Component {
     categoryQuery = this.categoryFilter.queryParamsStr,
     brandQuery = this.brandFilter.queryParamsStr,
   ) {
+    console.log('USE FILTER');
     const categoryArr = categoryQuery ? categoryQuery.split('↕') : [];
     const brandArr = brandQuery ? brandQuery.split('↕') : [];
 
@@ -54,6 +55,8 @@ export class ProductsPage extends Component {
 
     this.filterCards = [...newCards];
     this.loadCards(this.filterCards);
+    this.priceFilter.fillBoxValues(countRange(this.filterCards, 'price'));
+    this.stockFilter.fillBoxValues(countRange(this.filterCards, 'stock'));
   }
 
   loadCards(cards = this.filterCards) {
@@ -84,6 +87,25 @@ export class ProductsPage extends Component {
     this.updateQtyDisplay();
   }
 
+  onCheckBoxHandle() {
+    this.useFilters();
+    const rangePrice = countRange(this.filterCards, 'price');
+    const rangeStock = countRange(this.filterCards, 'stock');
+    const maxRangePrice = countRange(this.allCards, 'price');
+    const maxRangeStock = countRange(this.allCards, 'stock');
+    if (rangePrice.join('') !== '') {
+      this.priceFilter.slider.noUiSlider?.set(rangePrice);
+      this.priceFilter.fillBoxValues(rangePrice);
+      this.stockFilter.slider.noUiSlider?.set(rangeStock);
+      this.stockFilter.fillBoxValues(rangeStock);
+    } else {
+      this.priceFilter.slider.noUiSlider?.set(maxRangePrice);
+      this.priceFilter.fillBoxValues(['-', '-']);
+      this.stockFilter.slider.noUiSlider?.set(maxRangeStock);
+      this.stockFilter.fillBoxValues(['-', '-']);
+    }
+  }
+
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
 
@@ -92,10 +114,14 @@ export class ProductsPage extends Component {
     const stockRange = countRange(products.products, 'stock');
 
     this.categoryFilter = new CheckboxFilter(this.categoryList, 'category');
-    this.categoryFilter.onCheckbox = () => this.useFilters();
+    this.categoryFilter.onCheckbox = () => {
+      this.onCheckBoxHandle();
+    };
 
     this.brandFilter = new CheckboxFilter(this.brandList, 'brand');
-    this.brandFilter.onCheckbox = () => this.useFilters();
+    this.brandFilter.onCheckbox = () => {
+      this.onCheckBoxHandle();
+    };
 
     this.priceFilter = new SliderFilter('price', priceRange);
     this.priceFilter.onSlider = () => {

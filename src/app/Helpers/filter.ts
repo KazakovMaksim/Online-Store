@@ -12,12 +12,14 @@ export function formCollection(sourceArr: Product[], selector: Selector) {
 }
 
 export function countRange(sourceArr: Product[] | Card[], selector: 'price' | 'stock') {
-  const collection = sourceArr
-    .map((product: Product | Card) => product[selector])
-    .sort((a, b) => a - b);
-  const min = collection[0];
-  const max = Math.max.apply(null, collection);
-  return [String(min), String(max)];
+  const collection = sourceArr.map((product: Product | Card) => product[selector]);
+  if (collection.length) {
+    collection.sort((a, b) => a - b);
+    const min = collection[0];
+    const max = Math.max.apply(null, collection);
+    return [String(min), String(max)];
+  }
+  return ['', ''];
 }
 
 export function changeQueryParameterValues(
