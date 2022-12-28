@@ -102,3 +102,10 @@
 .fix-width{
   flex-grow: 0;
 }
+
+.filter-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+}

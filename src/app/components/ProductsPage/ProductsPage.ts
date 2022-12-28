@@ -32,7 +32,6 @@ export class ProductsPage extends Component {
     categoryQuery = this.categoryFilter.queryParamsStr,
     brandQuery = this.brandFilter.queryParamsStr,
   ) {
-    console.log('USE FILTER');
     const categoryArr = categoryQuery ? categoryQuery.split('↕') : [];
     const brandArr = brandQuery ? brandQuery.split('↕') : [];
 
@@ -106,12 +105,23 @@ export class ProductsPage extends Component {
     }
   }
 
+  resetFilters = () => {
+    console.log('RESET FILTERS');
+  };
+
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
 
     // implement filters block
     const priceRange = countRange(products.products, 'price');
     const stockRange = countRange(products.products, 'stock');
+
+    const filterButtons = new Component(this.controlsContainer.node, 'div', 'filter-buttons');
+    const resetFilterBtn = new Component(filterButtons.node, 'button', 'btn', 'Reset Filters');
+    resetFilterBtn.node.onclick = () => {
+      this.resetFilters();
+    };
+    const copyLinkBtn = new Component(filterButtons.node, 'button', 'btn', 'Copy Link');
 
     this.categoryFilter = new CheckboxFilter(this.categoryList, 'category');
     this.categoryFilter.onCheckbox = () => {
