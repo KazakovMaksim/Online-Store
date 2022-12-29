@@ -1,6 +1,8 @@
 import { Component } from '../component';
 import { changeQueryParameterValues } from '../../helpers/filter';
 import './CheckboxFilter.scss';
+import { app } from '../../..';
+import { ProductsPage } from '../ProductsPage/ProductsPage';
 
 export class CheckboxFilter extends Component {
   filterGroup = new Component(null, 'div', 'filter-group');
@@ -36,7 +38,9 @@ export class CheckboxFilter extends Component {
         } else {
           this.updateQueryInURL(group, filterListName, 'del');
         }
+        console.log(123);
         this.onCheckbox();
+        (app.mainContent as ProductsPage).fixLastItemsDisplay();
       };
     });
 

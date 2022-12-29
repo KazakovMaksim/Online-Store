@@ -3,4 +3,5 @@ import './style.scss';
 import './app/constants/fonts.scss';
 
 const app = new App();
+export { app };
 app.enableRouteChange();
