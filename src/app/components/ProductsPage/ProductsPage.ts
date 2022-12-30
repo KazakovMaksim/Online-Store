@@ -54,6 +54,7 @@ export class ProductsPage extends Component {
 
     this.filterCards = [...newCards];
     this.loadCards(this.filterCards);
+    this.fixLastItemsDisplay();
   }
 
   loadCards(cards = this.filterCards) {

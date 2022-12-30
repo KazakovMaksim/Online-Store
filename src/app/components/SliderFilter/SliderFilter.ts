@@ -4,8 +4,6 @@ import '../../../../node_modules/nouislider/dist/nouislider.css';
 import { target } from '../../../../node_modules/nouislider/dist/nouislider';
 import './SliderFilter.scss';
 import { updateQueryInURL } from '../../helpers/filter';
-import { app } from '../../..';
-import { ProductsPage } from '../ProductsPage/ProductsPage';
 
 export class SliderFilter extends Component {
   rangeContainer: Component;
@@ -54,7 +52,6 @@ export class SliderFilter extends Component {
       updateQueryInURL(this.sliderValues.join('↕'), filterListName, this.paramsList);
       this.paramsList = new URL(window.location.href).searchParams.getAll(filterListName)[0];
       this.onSlider();
-      (app.mainContent as ProductsPage).fixLastItemsDisplay();
     });
   }
 }
