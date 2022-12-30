@@ -56,6 +56,7 @@ export class ProductsPage extends Component {
     this.loadCards(this.filterCards);
     this.priceFilter.fillBoxValues(countRange(this.filterCards, 'price'));
     this.stockFilter.fillBoxValues(countRange(this.filterCards, 'stock'));
+    this.fixLastItemsDisplay();
   }
 
   loadCards(cards = this.filterCards) {
@@ -234,27 +235,27 @@ export class ProductsPage extends Component {
       updateQueryInURL(String(index), 'sort', paramsList);
     });
     this.sortOptions.node.addEventListener('change', () => this.loadCards());
-    this.sortOptions.node.addEventListener('change', fixLastItemsDisplay);
+    this.sortOptions.node.addEventListener('change', this.fixLastItemsDisplay);
 
     this.useFilters();
 
     this.updateQtyDisplay();
 
-    fixLastItemsDisplay();
+    this.fixLastItemsDisplay();
 
-    window.addEventListener('resize', fixLastItemsDisplay);
+    window.addEventListener('resize', this.fixLastItemsDisplay);
+  }
 
-    function fixLastItemsDisplay() {
-      const products = productList.node.children;
-      [...products].forEach((el) => el.classList.remove('fix-width'));
-      if (window.innerWidth > 1239) {
-        const productsQty = products.length;
-        const remain = productsQty % 3;
-        const remainItems = [...productList.node.children].filter(
-          (el, indx) => indx + 1 > productsQty - remain,
-        );
-        remainItems.forEach((el) => el.classList.add('fix-width'));
-      }
+  fixLastItemsDisplay() {
+    const products = this.productList.node.children;
+    [...products].forEach((el) => el.classList.remove('fix-width'));
+    if (window.innerWidth > 1239) {
+      const productsQty = products.length;
+      const remain = productsQty % 3;
+      const remainItems = [...this.productList.node.children].filter(
+        (el, indx) => indx + 1 > productsQty - remain,
+      );
+      remainItems.forEach((el) => el.classList.add('fix-width'));
     }
   }
 }
