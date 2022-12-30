@@ -124,6 +124,17 @@
   }
 }
 
+.in-cart{
+  .btn-desc-add{
+    background-color: #653780;
+    color: white;
+    &:hover{
+    background-color: #9268aa;
+
+    }
+  }
+}
+
 
 
 

@@ -28,6 +28,8 @@ export class App {
         CartController.updateCartQty = header.updateCartQty;
         CartController.updateTotalAmount = header.updateTotalAmount;
         document.body.append(header.node, this.main.node, new Footer().node);
+        CartController.setCartQty();
+        CartController.setTotalAmount();
       }
 
       if (currentRouteName === 'products') {
