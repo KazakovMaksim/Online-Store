@@ -36,7 +36,6 @@ export class CheckboxFilter extends Component {
         } else {
           this.updateQueryInURL(group, filterListName, 'del');
         }
-        console.log(123);
         this.onCheckbox();
       };
     });

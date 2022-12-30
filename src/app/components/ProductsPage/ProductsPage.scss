@@ -9,7 +9,6 @@
 }
 
 .controls-container {
-  flex: 0 1 20%;
   background-color: #f89f5b00;
 }
 
@@ -101,4 +100,31 @@
 
 .fix-width{
   flex-grow: 0;
+}
+
+.controls-wrapper{
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+
+.controls-container{
+  flex-grow: 0;
+  flex-shrink: 1;
+  position: sticky;
+  top: 90px;
+  width: 202px;
+  width: 100%;
+}
+
+.controls-filler{
+  display: flex;
+  flex-grow: 1;
+}
+
+@media screen and (max-width: 650px) {
+  .controls-container{
+    width: 102%;
+    top: 117px;
+  }
 }

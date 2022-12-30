@@ -9,7 +9,8 @@ import { CartItem, Product } from '../../types/interface';
 import { CartController } from '../../Helpers/cartController';
 
 export class ProductsPage extends Component {
-  controlsContainer = new Component(this.node, 'div', 'controls-container');
+  controlsWrapper = new Component(this.node, 'div', 'controls-wrapper');
+  controlsContainer = new Component(this.controlsWrapper.node, 'div', 'controls-container');
   productsContainer = new Component(this.node, 'div', 'products-container');
   productList: Component;
   productsFound: Component;
@@ -125,6 +126,8 @@ export class ProductsPage extends Component {
       this.priceFilter.node,
       this.stockFilter.node,
     );
+
+    this.controlsWrapper.node.append(new Component(null, 'div', 'controls-filler').node);
 
     // two main blocks in product-container
     const listSettings = new Component(this.productsContainer.node, 'article', 'list-settings');
