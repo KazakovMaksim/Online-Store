@@ -130,44 +130,6 @@ export class ProductsPage extends Component {
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
 
-    // implement filters block
-    const priceRange = countRange(products.products, 'price');
-    const stockRange = countRange(products.products, 'stock');
-
-    const filterButtons = new Component(this.controlsContainer.node, 'div', 'filter-buttons');
-    const resetFilterBtn = new Component(filterButtons.node, 'button', 'btn', 'Reset Filters');
-    resetFilterBtn.node.onclick = () => {
-      this.resetFilters();
-    };
-    const copyLinkBtn = new Component(filterButtons.node, 'button', 'btn', 'Copy Link');
-
-    this.categoryFilter = new CheckboxFilter(this.categoryList, 'category');
-    this.categoryFilter.onCheckbox = () => {
-      this.onCheckBoxHandle();
-    };
-
-    this.brandFilter = new CheckboxFilter(this.brandList, 'brand');
-    this.brandFilter.onCheckbox = () => {
-      this.onCheckBoxHandle();
-    };
-
-    this.priceFilter = new SliderFilter('price', priceRange);
-    this.priceFilter.onSlider = () => {
-      this.useFilters();
-    };
-
-    this.stockFilter = new SliderFilter('stock', stockRange);
-    this.stockFilter.onSlider = () => {
-      this.useFilters();
-    };
-
-    this.controlsContainer.node.append(
-      this.categoryFilter.node,
-      this.brandFilter.node,
-      this.priceFilter.node,
-      this.stockFilter.node,
-    );
-
     // two main blocks in product-container
     const listSettings = new Component(this.productsContainer.node, 'article', 'list-settings');
     const productList = new Component(this.productsContainer.node, 'div', 'products-list');
@@ -227,6 +189,44 @@ export class ProductsPage extends Component {
 
     products.products.forEach((product: Product) =>
       this.allCards.push(new Card(this.productList.node, product)),
+    );
+
+    // implement filters block
+    const priceRange = countRange(products.products, 'price');
+    const stockRange = countRange(products.products, 'stock');
+
+    const filterButtons = new Component(this.controlsContainer.node, 'div', 'filter-buttons');
+    const resetFilterBtn = new Component(filterButtons.node, 'button', 'btn', 'Reset Filters');
+    resetFilterBtn.node.onclick = () => {
+      this.resetFilters();
+    };
+    const copyLinkBtn = new Component(filterButtons.node, 'button', 'btn', 'Copy Link');
+
+    this.categoryFilter = new CheckboxFilter(this.categoryList, 'category', this.allCards);
+    this.categoryFilter.onCheckbox = () => {
+      this.onCheckBoxHandle();
+    };
+
+    this.brandFilter = new CheckboxFilter(this.brandList, 'brand', this.allCards);
+    this.brandFilter.onCheckbox = () => {
+      this.onCheckBoxHandle();
+    };
+
+    this.priceFilter = new SliderFilter('price', priceRange);
+    this.priceFilter.onSlider = () => {
+      this.useFilters();
+    };
+
+    this.stockFilter = new SliderFilter('stock', stockRange);
+    this.stockFilter.onSlider = () => {
+      this.useFilters();
+    };
+
+    this.controlsContainer.node.append(
+      this.categoryFilter.node,
+      this.brandFilter.node,
+      this.priceFilter.node,
+      this.stockFilter.node,
     );
 
     this.sortOptions.node.addEventListener('change', () => {

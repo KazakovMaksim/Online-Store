@@ -22,6 +22,12 @@
   &-field {
     margin: 0 0 5px;
     cursor: pointer;
+    position: relative;
+  }
+  &-amount {
+    position: absolute;
+    right: 10px;
+    top: 0;
   }
 }
 .hidden {

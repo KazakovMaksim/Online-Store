@@ -22,6 +22,18 @@ export function countRange(sourceArr: Product[] | Card[], selector: 'price' | 's
   return ['', ''];
 }
 
+export function countProductAmount(sourceArr: Product[] | Card[], selector: Selector) {
+  const amountTable = new Map();
+  sourceArr.forEach((product: Product | Card) => {
+    let val = amountTable.get(product[selector]) ? amountTable.get(product[selector]) : 1;
+    if (amountTable.has(product[selector])) {
+      val++;
+    }
+    amountTable.set(product[selector], val);
+  });
+  return amountTable;
+}
+
 export function changeQueryParameterValues(
   paramValue: string,
   paramName: string,

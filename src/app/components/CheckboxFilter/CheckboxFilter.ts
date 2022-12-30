@@ -1,6 +1,7 @@
 import { Component } from '../component';
-import { changeQueryParameterValues } from '../../helpers/filter';
+import { changeQueryParameterValues, countProductAmount } from '../../helpers/filter';
 import './CheckboxFilter.scss';
+import { Card } from '../Card/card';
 
 export class CheckboxFilter extends Component {
   filterGroup = new Component(null, 'div', 'filter-group');
@@ -9,7 +10,7 @@ export class CheckboxFilter extends Component {
 
   onCheckbox: () => void = () => console.log();
 
-  constructor(groups: string[], filterListName: string) {
+  constructor(groups: string[], filterListName: string, allCards: Card[]) {
     super(null, 'div', 'filter');
 
     this.queryParamsStr = new URL(window.location.href).searchParams.getAll(filterListName)[0];
@@ -31,6 +32,13 @@ export class CheckboxFilter extends Component {
       if (i >= 5) {
         filterField.node.classList.add('hidden');
       }
+
+      const categoriesTable = countProductAmount(allCards, 'category');
+      const brandsTable = countProductAmount(allCards, 'brand');
+      const amount =
+        filterListName === 'brand' ? brandsTable.get(group) : categoriesTable.get(group);
+      const stockAmount = new Component(null, 'span', 'filter-amount', `${amount}/${amount}`);
+      filterField.node.append(checkbox.node, label.node, stockAmount.node);
 
       checkbox.node.onclick = () => {
         if ((checkbox.node as HTMLInputElement).checked) {
