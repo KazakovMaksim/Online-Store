@@ -14,6 +14,8 @@ export class CartController {
       } else cartArray?.push(cartItem);
       this.setCartItems(cartArray);
     }
+    this.setCartQty();
+    this.setTotalAmount();
   }
 
   static remove(id: number) {
@@ -22,6 +24,8 @@ export class CartController {
       return item.id !== id;
     });
     if (newCartItems) this.setCartItems(newCartItems);
+    this.setCartQty();
+    this.setTotalAmount();
   }
 
   static getCartItems(): CartItem[] | null {
@@ -32,5 +36,22 @@ export class CartController {
   static setCartItems(cartItems: CartItem[] | null): void {
     if (!cartItems) return;
     localStorage.setItem('Cart', JSON.stringify(cartItems));
+  }
+
+  static updateCartQty: (qty: number) => void = () => null;
+  static updateTotalAmount: (amount: number) => void = () => null;
+
+  static setCartQty() {
+    let qty = 0;
+    const cartItems = this.getCartItems();
+    cartItems?.forEach((item) => (qty += item.quantity));
+    this.updateCartQty(qty);
+  }
+
+  static setTotalAmount() {
+    let amount = 0;
+    const cartItems = this.getCartItems();
+    cartItems?.forEach((item) => (amount += item.cost));
+    this.updateTotalAmount(amount);
   }
 }

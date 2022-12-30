@@ -92,6 +92,8 @@ export class ProductsPage extends Component {
       const CardInCart = this.allCards.find((card: Card) => card.id === item.id);
       CardInCart?.updateCardState(null);
     });
+    CartController.setCartQty();
+    CartController.setTotalAmount();
   }
 
   constructor(parentNode: HTMLElement | null) {

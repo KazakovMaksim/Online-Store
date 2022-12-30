@@ -4,6 +4,10 @@ import './header.scss';
 export class Header extends Component {
   totalAmount: Component;
   cartQty: Component;
+
+  updateCartQty: (qty: number) => void;
+  updateTotalAmount: (amount: number) => void;
+
   constructor() {
     super(document.body, 'header', 'header');
     const innerHeader = new Component(this.node, 'div', 'wrapper header-inner');
@@ -32,5 +36,13 @@ export class Header extends Component {
       'cart-quantity',
       '0',
     );
+
+    this.updateCartQty = (qty: number) => {
+      this.cartQty.node.textContent = qty.toString();
+    };
+
+    this.updateTotalAmount = (amount: number) => {
+      this.totalAmount.node.textContent = amount.toString();
+    };
   }
 }
