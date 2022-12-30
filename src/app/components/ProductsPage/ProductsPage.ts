@@ -5,7 +5,8 @@ import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
 import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
-import { Product } from '../../types/interface';
+import { CartItem, Product } from '../../types/interface';
+import { CartController } from '../../Helpers/cartController';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
@@ -83,6 +84,14 @@ export class ProductsPage extends Component {
       productList.append(card.node);
     });
     this.updateQtyDisplay();
+  }
+
+  pageLoaded() {
+    const cartItems = CartController.getCartItems();
+    cartItems?.forEach((item: CartItem) => {
+      const CardInCart = this.allCards.find((card: Card) => card.id === item.id);
+      CardInCart?.updateCardState(null);
+    });
   }
 
   constructor(parentNode: HTMLElement | null) {
@@ -191,6 +200,8 @@ export class ProductsPage extends Component {
     this.fixLastItemsDisplay();
 
     window.addEventListener('resize', this.fixLastItemsDisplay);
+
+    this.pageLoaded();
   }
 
   fixLastItemsDisplay() {

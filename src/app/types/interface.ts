@@ -21,4 +21,10 @@ export interface Product {
   images: string[];
 }
 
+export interface CartItem {
+  id: number;
+  cost: number;
+  quantity: number;
+}
+
 export type ProductKeys = keyof Product;
