@@ -63,5 +63,9 @@ export class Card extends Component {
     btnDetails.addEventListener('click', () => {
       window.location.hash = `product-details/${this.id}`;
     });
+
+    btnAdd.addEventListener('click', () => {
+      // test changes for git
+    });
   }
 }
