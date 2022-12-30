@@ -30,6 +30,11 @@ body{
   margin: 0;
 }
 
+.main{
+  z-index: 0;
+  position: relative;
+}
+
 .wrapper{
   max-width: 1250px;
   margin: 0 auto;
