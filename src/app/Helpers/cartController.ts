@@ -18,6 +18,23 @@ export class CartController {
     this.setTotalAmount();
   }
 
+  static decreaseItemQty(id: number) {
+    const cartItems = this.getCartItems();
+    let newCartItems: CartItem[] | undefined;
+    const itemToSearch = cartItems?.find((item) => item.id === id);
+    if (itemToSearch?.quantity ? itemToSearch?.quantity > 1 : false) {
+      newCartItems = cartItems?.map((item) => {
+        if (item.id === id) {
+          item.quantity--;
+        }
+        return item;
+      });
+    }
+    if (newCartItems) this.setCartItems(newCartItems);
+    this.setCartQty();
+    this.setTotalAmount();
+  }
+
   static remove(id: number) {
     const cartItems = this.getCartItems();
     const newCartItems: CartItem[] | undefined = cartItems?.filter((item: CartItem) => {
@@ -51,7 +68,12 @@ export class CartController {
   static setTotalAmount() {
     let amount = 0;
     const cartItems = this.getCartItems();
-    cartItems?.forEach((item) => (amount += item.cost));
+    cartItems?.forEach((item) => (amount += item.cost * item.quantity));
     this.updateTotalAmount(amount);
+  }
+
+  static getItemQty(id: number) {
+    const items = this.getCartItems();
+    return items?.find((item) => item.id === id)?.quantity;
   }
 }

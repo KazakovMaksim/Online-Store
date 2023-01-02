@@ -1,5 +1,57 @@
 .cart-page {
-  background-color: brown;
+  background-color: rgb(255, 255, 255);
   height: calc(100vh - 118px);
   padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: stretch;
+
+  &-items-list{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
 }
+
+.main{
+  .cart-page{
+    margin-top: 10px;
+  }
+}
+
+.page-header{
+  padding-bottom: 20px;
+  font-family: 'Kenia';
+  font-size: 2rem;
+  color: #F89F5B;
+  flex: 2 0 300px;
+  border-bottom: 1px solid rgba(96, 96, 96, 0.335);
+}
+
+.cart-page-container{
+  padding: 20px 15px;
+  flex: 3 0 300px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+
+.summary-container{
+  flex: 1 1 300px;
+}
+
+.cart-empty-msg{
+  padding: 10px;
+  padding-left: 0;
+  font-size: 1.3rem;
+  .product-link{
+    color: #811abd;
+
+    &:hover{
+
+      text-shadow: 2px 2px 3px #9c5dc0;
+    }
+  }
+}
+
+
