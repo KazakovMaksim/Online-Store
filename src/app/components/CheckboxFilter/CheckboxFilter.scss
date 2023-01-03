@@ -1,8 +1,24 @@
+@mixin scrollbar($bgr-color) {
+  background-color: $bgr-color;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
 .filter {
   padding: 8px;
   &-group {
     max-height: 200px;
     overflow: auto;
+    &::-webkit-scrollbar {
+      width: 8px;
+      @include scrollbar(#fff);
+    }
+    &::-webkit-scrollbar-button {
+      @include scrollbar(#653780);
+    }
+    &::-webkit-scrollbar-thumb {
+      @include scrollbar(#653780);
+    }
   }
   &-title {
     font-weight: 900;
@@ -15,8 +31,9 @@
     padding-top: 10px;
     color: #666;
     cursor: pointer;
+    font-weight: 600;
     &:hover {
-      color:aqua;
+      color:#653780;
     }
   }
   &-field {
@@ -24,22 +41,41 @@
     align-items: center;
     column-gap: 5px;
     margin: 2px 0 5px;
-    cursor: pointer;
     position: relative;
     & > label {
       display: inline-block;
       max-width: 130px;
     }
+    & > input {
+      cursor: pointer;
+    }
   }
   &-amount {
     position: absolute;
+    width: 30px;
     right: 10px;
     top: calc((100% - 22px) / 2);
     padding: 2px;
     border-radius: 5px;
-    border: 1px solid rgb(102, 102, 102);
+    border: 1px solid #666;
     text-align: center;
-    box-shadow: rgb(153 153 153) 0px 0px 0px 1px inset;
+    box-shadow: #666 0px 0px 0px 1px inset;
+    &_active {
+      border: 1px solid #653780;
+      color: #000;
+      font-weight: 600;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 5px;
+        background-color: #653780;
+        opacity: 0.2;
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 .hidden {
