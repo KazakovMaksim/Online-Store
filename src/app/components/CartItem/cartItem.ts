@@ -7,12 +7,19 @@ import './cartItem.scss';
 export class CartItem extends Component {
   cartPage: CartPage;
 
-  constructor(parentNode: HTMLElement | null, productId: number, cartPage: CartPage) {
+  constructor(
+    parentNode: HTMLElement | null,
+    productId: number,
+    cartPage: CartPage,
+    position: number,
+  ) {
     super(parentNode, 'div', 'cart-page-item');
     this.cartPage = cartPage;
     const product = products.products.find((product) => product.id === productId);
 
     if (product) {
+      // product position
+      new Component(this.node, 'div', 'item-position', position.toString());
       // image
       const imgBlock = new Component(this.node, 'div', 'img-block');
       imgBlock.node.style.backgroundImage = `url(${product?.thumbnail})`;

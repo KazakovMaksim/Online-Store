@@ -51,17 +51,21 @@ export class CartPage extends Component {
       } else if (limit && page) {
         cartItemsList.node.textContent = '';
         CartItems?.forEach((item, index) => {
-          if (index + 1 > (page - 1) * limit && index + 1 < page * limit + 1)
-            new CartItem(cartItemsList.node, item.id, this);
+          if (index + 1 > (page - 1) * limit && index + 1 < page * limit + 1) {
+            new CartItem(cartItemsList.node, item.id, this, index + 1);
+          }
         });
       }
     };
 
     const updatePageNumber = (num: number) => {
-      pageNumber.node.textContent = String(num);
       Pagination.setPage(num);
+      pageNumber.node.textContent = String(num);
       this.updateCartItemsList();
     };
+
+    const currentPage = Pagination.getPage();
+    if (currentPage) updatePageNumber(currentPage);
 
     this.setMaxPages = () => {
       const itemsQty = CartController.getCartItems()?.length;
