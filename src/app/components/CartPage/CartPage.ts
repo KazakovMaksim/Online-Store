@@ -8,6 +8,7 @@ export class CartPage extends Component {
   updateCartItemsList: () => void;
   setMaxPages: () => void;
   maxPages = 1;
+  emptyMsg: Component | null = null;
 
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'cart-page wrapper');
@@ -40,13 +41,20 @@ export class CartPage extends Component {
       const limit = Number(Pagination.getLimit());
       const page = Pagination.getPage();
       if (cartLength === 0) {
-        const emptyMsg = new Component(
-          cartItemsList.node,
+        this.emptyMsg?.destroy();
+        cartContainer.destroy();
+        this.emptyMsg = new Component(
+          this.node,
           'span',
           'cart-empty-msg',
           'Your Cart is Empty! Go',
         );
-        const linkToProducts = new Component(emptyMsg.node, 'a', 'product-link', ' Fill It Now!');
+        const linkToProducts = new Component(
+          this.emptyMsg.node,
+          'a',
+          'product-link',
+          ' Fill It Now!',
+        );
         (linkToProducts.node as HTMLAnchorElement).href = '#products';
       } else if (limit && page) {
         cartItemsList.node.textContent = '';
