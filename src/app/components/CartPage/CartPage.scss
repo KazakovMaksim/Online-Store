@@ -1,6 +1,5 @@
 .cart-page {
   background-color: rgb(255, 255, 255);
-  height: calc(100vh - 118px);
   padding: 10px;
   display: flex;
   flex-direction: row;
@@ -12,6 +11,42 @@
     flex-direction: column;
     gap: 5px;
   }
+
+  .pagination-block{
+    gap: 10px;
+    align-items: center;
+    display: flex;
+    border-bottom: 1px solid rgba(96, 96, 96, 0.335);
+    padding-bottom: 20px;
+    font-size: 1.3rem;
+
+    .limit-container{
+      display: flex;
+      align-items: center;
+
+      .limit-controller{
+        flex-shrink: 1;
+        font-size: 1.1rem;
+        text-align: center;
+        border: none;
+      }
+    }
+
+    .page-container{
+      display: flex;
+      gap: 10px;
+    }
+
+    .page-controls{
+      display: flex;
+      gap: 5px;
+
+      align-items: center;
+      .btn{
+        font-size: 1rem;
+      }
+    }
+  }
 }
 
 .main{
@@ -21,12 +56,10 @@
 }
 
 .page-header{
-  padding-bottom: 20px;
   font-family: 'Kenia';
   font-size: 2rem;
   color: #F89F5B;
   flex: 2 0 300px;
-  border-bottom: 1px solid rgba(96, 96, 96, 0.335);
 }
 
 .cart-page-container{

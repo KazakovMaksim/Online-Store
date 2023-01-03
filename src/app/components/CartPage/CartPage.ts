@@ -1,4 +1,5 @@
 import { CartController } from '../../Helpers/cartController';
+import { Pagination } from '../../Helpers/pagination';
 import { CartItem } from '../CartItem/cartItem';
 import { Component } from '../component';
 import './CartPage.scss';
@@ -12,7 +13,32 @@ export class CartPage extends Component {
     const cartContainer = new Component(this.node, 'div', 'cart-page-container');
     const summaryContainer = new Component(this.node, 'div', 'summary-container');
 
-    new Component(cartContainer.node, 'h2', 'page-header', 'Products in Cart');
+    const pagination = new Component(cartContainer.node, 'div', 'pagination-block');
+    new Component(pagination.node, 'h2', 'page-header', 'Products in Cart');
+
+    const limitBlock = new Component(pagination.node, 'div', 'limit-container');
+    new Component(limitBlock.node, 'span', 'limit-label', 'Limit: ');
+    const limitInput = new Component(limitBlock.node, 'input', 'limit-controller');
+    (limitInput.node as HTMLInputElement).type = 'number';
+
+    const pageBlock = new Component(pagination.node, 'div', 'page-container');
+    new Component(pageBlock.node, 'span', 'page-label', 'Page: ');
+    const pageControlsBlock = new Component(pageBlock.node, 'div', 'page-controls');
+
+    const pageDown = new Component(pageControlsBlock.node, 'button', 'btn btn-page-down', '<');
+    const pageNumber = new Component(pageControlsBlock.node, 'span', 'page-number', '1');
+    const pageUp = new Component(pageControlsBlock.node, 'button', 'btn btn-page-up', '>');
+
+    pageDown.node.addEventListener('click', () => {
+      const currentNum = Number(pageNumber.node.textContent);
+      if (currentNum > 1) pageNumber.node.textContent = String(currentNum - 1);
+      Pagination.setLimit(1);
+    });
+
+    pageUp.node.addEventListener('click', () => {
+      const currentNum = Number(pageNumber.node.textContent);
+      if (currentNum < 5) pageNumber.node.textContent = String(currentNum + 1);
+    });
 
     const cartItemsList = new Component(cartContainer.node, 'div', 'cart-page-items-list');
 
