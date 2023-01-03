@@ -6,6 +6,7 @@ import './CartPage.scss';
 
 export class CartPage extends Component {
   updateCartItemsList: () => void;
+  setMaxPages: () => void;
   maxPages = 1;
 
   constructor(parentNode: HTMLElement | null) {
@@ -33,25 +34,6 @@ export class CartPage extends Component {
     const cartItemsList = new Component(cartContainer.node, 'div', 'cart-page-items-list');
 
     // functions & event-handlers
-    const setMaxPages = () => {
-      const itemsQty = CartController.getCartItems()?.length;
-      const limit = Number(Pagination.getLimit());
-      if (itemsQty && limit) {
-        let division = itemsQty / limit;
-        if (!Number.isInteger(division)) division = Math.floor(division) + 1;
-        this.maxPages = division;
-        const currentPage = Pagination.getPage();
-        if (currentPage) if (this.maxPages < currentPage) updatePageNumber(this.maxPages);
-      }
-    };
-
-    const updateLimit = (value?: number) => {
-      (limitInput.node as HTMLInputElement).value = Pagination.getLimit() || '3';
-      if (value) Pagination.setLimit(value);
-      setMaxPages();
-    };
-
-    updateLimit();
     this.updateCartItemsList = () => {
       const CartItems = CartController.getCartItems();
       const cartLength = CartItems?.length;
@@ -75,13 +57,40 @@ export class CartPage extends Component {
       }
     };
 
-    this.updateCartItemsList();
-
     const updatePageNumber = (num: number) => {
       pageNumber.node.textContent = String(num);
       Pagination.setPage(num);
       this.updateCartItemsList();
     };
+
+    this.setMaxPages = () => {
+      const itemsQty = CartController.getCartItems()?.length;
+      const limit = Number(Pagination.getLimit());
+      if (itemsQty && limit) {
+        let division = itemsQty / limit;
+        if (!Number.isInteger(division)) division = Math.floor(division) + 1;
+        this.maxPages = division;
+        const currentPage = Pagination.getPage();
+        if (currentPage) if (this.maxPages < currentPage) updatePageNumber(this.maxPages);
+      }
+    };
+
+    const updateLimit = (value?: number) => {
+      const limit = Pagination.getLimit();
+      const cartItems = CartController.getCartItems();
+      (limitInput.node as HTMLInputElement).value = limit || '3';
+      if (cartItems)
+        if (Number(limit) > cartItems.length) {
+          Pagination.setLimit(cartItems.length);
+          (limitInput.node as HTMLInputElement).value = cartItems.length.toString();
+          this.setMaxPages();
+        }
+      if (value) Pagination.setLimit(value);
+      this.setMaxPages();
+    };
+
+    updateLimit();
+    this.updateCartItemsList();
 
     pageDown.node.addEventListener('click', () => {
       const currentNum = Number(pageNumber.node.textContent);
@@ -112,7 +121,7 @@ export class CartPage extends Component {
           return;
         }
       Pagination.setLimit(limitInputValue);
-      setMaxPages();
+      this.setMaxPages();
       this.updateCartItemsList();
     });
   }

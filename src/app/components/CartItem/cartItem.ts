@@ -80,6 +80,8 @@ export class CartItem extends Component {
           CartController.remove(productId);
           this.destroy();
           this.cartPage.updateCartItemsList();
+          cartPage.setMaxPages();
+          cartPage.updateCartItemsList();
         } else {
           CartController.decreaseItemQty(productId);
           updateItem(itemQty - 1);
