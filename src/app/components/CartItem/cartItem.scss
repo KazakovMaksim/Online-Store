@@ -1,12 +1,49 @@
 .cart-page-item{
+  position: relative;
   display: flex;
   gap: 10px;
+
+  .drop-from-cart{
+    visibility: hidden;
+    cursor: pointer;
+    font-size: 14px;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    text-decoration: underline;
+    opacity: 0;
+    transition: 0.3s ease-out;
+  }
+
+  &:hover .drop-from-cart{
+    visibility: visible;
+    opacity: 1;
+    color: rgb(203, 50, 50);
+  }
   
   .img-block{
+    border-radius: 15px;
+    overflow: hidden;
     height: 100px;
     background-position: center;
     background-size: cover;
     flex: 0 0 100px;
+    transition: all 0.3s;
+
+    &::before{
+      cursor: pointer;
+      display: block;
+      content: '';
+      width: 100%;
+      height: 100%;
+      background-color: #f5b833;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    &:hover:before{
+      opacity: 0.4;
+    }
+   
   }
   
   .description-block{

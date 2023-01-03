@@ -17,6 +17,10 @@ export class CartItem extends Component {
       const imgBlock = new Component(this.node, 'div', 'img-block');
       imgBlock.node.style.backgroundImage = `url(${product?.thumbnail})`;
 
+      imgBlock.node.addEventListener('click', () => {
+        window.location.hash = `product-details/${productId}`;
+      });
+
       // description
       const descriptionBlock = new Component(this.node, 'div', 'description-block');
       new Component(descriptionBlock.node, 'h3', 'product-name', product?.title);
@@ -74,18 +78,26 @@ export class CartItem extends Component {
         }
       });
 
+      const dropFromCart = () => {
+        CartController.remove(productId);
+        this.destroy();
+        this.cartPage.setMaxPages();
+        this.cartPage.updateCartItemsList();
+      };
+
       btnDown.node.addEventListener('click', () => {
         const itemQty = CartController.getItemQty(productId) || Infinity;
         if (itemQty === 1) {
-          CartController.remove(productId);
-          this.destroy();
-          this.cartPage.setMaxPages();
-          this.cartPage.updateCartItemsList();
+          dropFromCart();
         } else {
           CartController.decreaseItemQty(productId);
           updateItem(itemQty - 1);
         }
       });
+
+      // remove button
+      const dropBtn = new Component(this.node, 'p', 'drop-from-cart', 'Drop');
+      dropBtn.node.addEventListener('click', dropFromCart);
     }
   }
 }
