@@ -20,14 +20,26 @@
     }
   }
   &-field {
-    margin: 0 0 5px;
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    margin: 2px 0 5px;
     cursor: pointer;
     position: relative;
+    & > label {
+      display: inline-block;
+      max-width: 130px;
+    }
   }
   &-amount {
     position: absolute;
     right: 10px;
-    top: 0;
+    top: calc((100% - 22px) / 2);
+    padding: 2px;
+    border-radius: 5px;
+    border: 1px solid rgb(102, 102, 102);
+    text-align: center;
+    box-shadow: rgb(153 153 153) 0px 0px 0px 1px inset;
   }
 }
 .hidden {
