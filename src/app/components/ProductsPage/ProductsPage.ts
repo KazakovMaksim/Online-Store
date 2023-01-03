@@ -13,6 +13,7 @@ export class ProductsPage extends Component {
   productList: Component;
   productsFound: Component;
   sortOptions: Component;
+  currCheckedList = new Map();
   categoryList: string[] = formCollection(products.products, 'category');
   brandList: string[] = formCollection(products.products, 'brand');
   allCards: Card[] = [];
@@ -34,7 +35,6 @@ export class ProductsPage extends Component {
   ) {
     const categoryArr = categoryQuery ? categoryQuery.split('↕') : [];
     const brandArr = brandQuery ? brandQuery.split('↕') : [];
-
     let newCards: Card[] = [...this.allCards];
 
     if (categoryQuery) {
@@ -52,7 +52,39 @@ export class ProductsPage extends Component {
       newCards = newCards.filter((card) => card.stock >= +leftVal && card.stock <= +rightVal);
     }
 
+    const newProdTable = new Map();
+
     this.filterCards = [...newCards];
+
+    this.filterCards.forEach((card) => {
+      let valCat = newProdTable.get(card.category) ? newProdTable.get(card.category) : 1;
+      if (newProdTable.has(card.category)) {
+        valCat++;
+      }
+      newProdTable.set(card.category, valCat);
+
+      let valBrand = newProdTable.get(card.brand) ? newProdTable.get(card.brand) : 1;
+      if (newProdTable.has(card.brand)) {
+        valBrand++;
+      }
+      newProdTable.set(card.brand, valBrand);
+    });
+
+    this.brandList.forEach((cat) => {
+      if (newProdTable.has(cat)) {
+        this.brandFilter.drawProductAmount(cat, newProdTable.get(cat));
+      } else {
+        this.brandFilter.drawProductAmount(cat, '0');
+      }
+    });
+    this.categoryList.forEach((cat) => {
+      if (newProdTable.has(cat)) {
+        this.categoryFilter.drawProductAmount(cat, newProdTable.get(cat));
+      } else {
+        this.categoryFilter.drawProductAmount(cat, '0');
+      }
+    });
+
     this.loadCards(this.filterCards);
     this.priceFilter.fillBoxValues(countRange(this.filterCards, 'price'));
     this.stockFilter.fillBoxValues(countRange(this.filterCards, 'stock'));

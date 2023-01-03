@@ -22,7 +22,10 @@ export function countRange(sourceArr: Product[] | Card[], selector: 'price' | 's
   return ['', ''];
 }
 
-export function countProductAmount(sourceArr: Product[] | Card[], selector: Selector) {
+export function countProductAmount(
+  sourceArr: Product[] | Card[],
+  selector: Selector,
+): Map<string, number> {
   const amountTable = new Map();
   sourceArr.forEach((product: Product | Card) => {
     let val = amountTable.get(product[selector]) ? amountTable.get(product[selector]) : 1;

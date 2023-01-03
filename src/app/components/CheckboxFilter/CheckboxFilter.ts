@@ -7,12 +7,12 @@ export class CheckboxFilter extends Component {
   filterGroup = new Component(null, 'div', 'filter-group');
   queryParamsStr: string;
   filterCheckboxes: Component[] = [];
+  stockAmount = new Map();
 
   onCheckbox: () => void = () => console.log();
 
   constructor(groups: string[], filterListName: string, allCards: Card[]) {
     super(null, 'div', 'filter');
-
     this.queryParamsStr = new URL(window.location.href).searchParams.getAll(filterListName)[0];
     new Component(this.node, 'p', 'filter-title', filterListName);
     this.node.append(this.filterGroup.node);
@@ -28,7 +28,6 @@ export class CheckboxFilter extends Component {
       }
 
       const label = new Component(null, 'label', 'checkbox_filter-label', group);
-      filterField.node.append(checkbox.node, label.node);
       if (i >= 5) {
         filterField.node.classList.add('hidden');
       }
@@ -37,8 +36,10 @@ export class CheckboxFilter extends Component {
       const brandsTable = countProductAmount(allCards, 'brand');
       const amount =
         filterListName === 'brand' ? brandsTable.get(group) : categoriesTable.get(group);
-      const stockAmount = new Component(null, 'span', 'filter-amount', `${amount}/${amount}`);
+      const current = filterListName === 'brand' ? 0 : amount;
+      const stockAmount = new Component(null, 'span', 'filter-amount', `${current}/${amount}`);
       filterField.node.append(checkbox.node, label.node, stockAmount.node);
+      this.stockAmount.set(group, { span: stockAmount, current: amount, stock: amount });
 
       checkbox.node.onclick = () => {
         if ((checkbox.node as HTMLInputElement).checked) {
@@ -68,6 +69,11 @@ export class CheckboxFilter extends Component {
         child.classList.toggle('hidden');
       }
     });
+  }
+
+  drawProductAmount(name: string, amount: string) {
+    const node = this.stockAmount.get(name).span.node;
+    node.innerText = `${amount}/${node.innerText.split('/')[1]}`;
   }
 
   updateQueryInURL(parameterValue: string, parameterName: string, operation: string) {
