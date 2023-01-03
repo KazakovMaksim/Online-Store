@@ -79,7 +79,7 @@ export class CartPage extends Component {
       const limit = Pagination.getLimit();
       const cartItems = CartController.getCartItems();
       (limitInput.node as HTMLInputElement).value = limit || '3';
-      if (cartItems)
+      if (cartItems?.length)
         if (Number(limit) > cartItems.length) {
           Pagination.setLimit(cartItems.length);
           (limitInput.node as HTMLInputElement).value = cartItems.length.toString();
