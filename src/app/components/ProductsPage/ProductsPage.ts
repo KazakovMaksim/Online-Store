@@ -3,7 +3,7 @@ import { Card } from '../Card/card';
 import { products } from '../../data/products';
 import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
-import {  countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
+import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
 import { Product, Selector } from '../../types/interface';
 
@@ -213,10 +213,17 @@ export class ProductsPage extends Component {
 
     // decorative line - hr
     new Component(listSettings.node, 'div', 'deco-line');
+
+    // search field
     const searchContainer = new Component(listSettings.node, 'div', 'search-container');
     const searchBox = new Component(searchContainer.node, 'input', 'search-box');
     searchBox.node.setAttribute('type', 'search');
     searchBox.node.setAttribute('placeholder', 'search product');
+    const paramsList = new URL(window.location.href).searchParams.getAll('search')[0];
+    if (paramsList) {
+      (searchBox.node as HTMLInputElement).value = paramsList;
+      this.searchStr = paramsList;
+    }
     searchBox.node.oninput = () => {
       this.searchStr = (searchBox.node as HTMLInputElement).value;
       this.useFilters();
