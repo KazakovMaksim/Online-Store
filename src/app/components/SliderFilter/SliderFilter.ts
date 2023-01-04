@@ -12,7 +12,7 @@ export class SliderFilter extends Component {
   sliderBoxes: Component[];
   paramsList: string;
 
-  onSlider: () => void = () => console.log();
+  onSlider: () => void = () => null;
 
   constructor(filterListName: string, filterRange: string[]) {
     super(null, 'div', 'filter');

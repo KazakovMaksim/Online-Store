@@ -9,7 +9,7 @@ export class CheckboxFilter extends Component {
   filterCheckboxes: Component[] = [];
   stockAmount = new Map();
 
-  onCheckbox: () => void = () => console.log();
+  onCheckbox: () => void = () => null;
 
   constructor(groups: string[], filterListName: string, allCards: Card[]) {
     super(null, 'div', 'filter');
