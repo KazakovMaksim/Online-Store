@@ -59,7 +59,7 @@ export class SliderFilter extends Component {
 
   fillBoxValues(range: string[]) {
     const [filterFrom, filterTo] = this.sliderBoxes;
-    filterFrom.node.innerText = range[0];
-    filterTo.node.innerText = range[1];
+    filterFrom.node.innerText = range[0] ? range[0] : '-';
+    filterTo.node.innerText = range[1] ? range[1] : '-';
   }
 }
