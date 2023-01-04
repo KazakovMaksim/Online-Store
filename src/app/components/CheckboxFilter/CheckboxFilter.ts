@@ -37,7 +37,12 @@ export class CheckboxFilter extends Component {
       const amount =
         filterListName === 'brand' ? brandsTable.get(group) : categoriesTable.get(group);
       const current = filterListName === 'brand' ? 0 : amount;
-      const stockAmount = new Component(null, 'span', 'filter-amount', `${current}/${amount}`);
+      const stockAmount = new Component(
+        null,
+        'span',
+        'filter-amount filter-amount_active',
+        `${current}/${amount}`,
+      );
       filterField.node.append(checkbox.node, label.node, stockAmount.node);
       this.stockAmount.set(group, { span: stockAmount, current: amount, stock: amount });
 

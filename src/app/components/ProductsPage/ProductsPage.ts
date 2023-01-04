@@ -5,7 +5,7 @@ import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
 import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
-import { Product } from '../../types/interface';
+import { Product, Selector } from '../../types/interface';
 
 export class ProductsPage extends Component {
   controlsContainer = new Component(this.node, 'div', 'controls-container');
@@ -27,6 +27,28 @@ export class ProductsPage extends Component {
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
     this.productsFound.node.textContent = String(qty);
+  }
+
+  changeProdQtyOnCheckbox(newProdTable: Map<string, number>, card: Card, group: Selector) {
+    let val = newProdTable.get(card[group]) ? newProdTable.get(card[group]) : 1;
+    if (newProdTable.has(card[group]) && val) {
+      val++;
+    }
+    if (val) {
+      newProdTable.set(card[group], val);
+    }
+  }
+
+  redrawProdQtyOnCheckbox(newProdTable: Map<string, number>, group: string, name: Selector) {
+    const newVal = newProdTable.get(group);
+    const filter = name === 'brand' ? this.brandFilter : this.categoryFilter;
+    if (newProdTable.has(group) && newVal) {
+      filter.drawProductAmount(group, String(newVal));
+      filter.stockAmount.get(group).span.node.classList.add('filter-amount_active');
+    } else {
+      filter.drawProductAmount(group, '0');
+      filter.stockAmount.get(group).span.node.classList.remove('filter-amount_active');
+    }
   }
 
   useFilters(
@@ -57,32 +79,15 @@ export class ProductsPage extends Component {
     this.filterCards = [...newCards];
 
     this.filterCards.forEach((card) => {
-      let valCat = newProdTable.get(card.category) ? newProdTable.get(card.category) : 1;
-      if (newProdTable.has(card.category)) {
-        valCat++;
-      }
-      newProdTable.set(card.category, valCat);
-
-      let valBrand = newProdTable.get(card.brand) ? newProdTable.get(card.brand) : 1;
-      if (newProdTable.has(card.brand)) {
-        valBrand++;
-      }
-      newProdTable.set(card.brand, valBrand);
+      this.changeProdQtyOnCheckbox(newProdTable, card, 'category');
+      this.changeProdQtyOnCheckbox(newProdTable, card, 'brand');
     });
 
-    this.brandList.forEach((cat) => {
-      if (newProdTable.has(cat)) {
-        this.brandFilter.drawProductAmount(cat, newProdTable.get(cat));
-      } else {
-        this.brandFilter.drawProductAmount(cat, '0');
-      }
+    this.brandList.forEach((group) => {
+      this.redrawProdQtyOnCheckbox(newProdTable, group, 'brand');
     });
-    this.categoryList.forEach((cat) => {
-      if (newProdTable.has(cat)) {
-        this.categoryFilter.drawProductAmount(cat, newProdTable.get(cat));
-      } else {
-        this.categoryFilter.drawProductAmount(cat, '0');
-      }
+    this.categoryList.forEach((group) => {
+      this.redrawProdQtyOnCheckbox(newProdTable, group, 'category');
     });
 
     this.loadCards(this.filterCards);
