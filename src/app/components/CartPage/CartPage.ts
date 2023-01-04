@@ -72,7 +72,7 @@ export class CartPage extends Component {
       this.updateCartItemsList();
     };
 
-    const currentPage = Pagination.getPage();
+    const currentPage = Pagination.getPage() || 1;
     if (currentPage) updatePageNumber(currentPage);
 
     this.setMaxPages = () => {
@@ -98,6 +98,7 @@ export class CartPage extends Component {
           this.setMaxPages();
         }
       if (value) Pagination.setLimit(value);
+      else Pagination.setLimit(3);
       this.setMaxPages();
     };
 
