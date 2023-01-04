@@ -20,11 +20,12 @@ export class CheckboxFilter extends Component {
     groups.forEach((group, i) => {
       const filterField = new Component(this.filterGroup.node, 'div', 'filter-field');
 
-      const checkbox = new Component(null, 'input', 'checkbox_filter-check');
+      const checkbox = new Component(null, 'input', 'filter-check');
       this.filterCheckboxes.push(checkbox);
       checkbox.node.setAttribute('type', 'checkbox');
       if (this.queryParamsStr && this.queryParamsStr.indexOf(group) >= 0) {
         (checkbox.node as HTMLInputElement).checked = true;
+        (checkbox.node as HTMLInputElement).classList.add('filter-check_active');
       }
 
       const label = new Component(null, 'label', 'checkbox_filter-label', group);
@@ -52,6 +53,7 @@ export class CheckboxFilter extends Component {
         } else {
           this.updateQueryInURL(group, filterListName, 'del');
         }
+        (checkbox.node as HTMLInputElement).classList.toggle('filter-check_active');
         this.onCheckbox();
       };
     });
