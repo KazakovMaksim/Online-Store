@@ -3,7 +3,7 @@ import { Card } from '../Card/card';
 import { products } from '../../data/products';
 import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
-import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
+import {  countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
 import { Product, Selector } from '../../types/interface';
 
@@ -220,6 +220,12 @@ export class ProductsPage extends Component {
     searchBox.node.oninput = () => {
       this.searchStr = (searchBox.node as HTMLInputElement).value;
       this.useFilters();
+      const paramsList = new URL(window.location.href).searchParams.getAll('search')[0];
+      if (this.searchStr) {
+        updateQueryInURL(this.searchStr, 'search', paramsList);
+      } else {
+        this.brandFilter.updateQueryInURL(this.searchStr, 'search', 'del');
+      }
     };
 
     // items display buttons
