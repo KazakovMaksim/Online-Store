@@ -14,6 +14,8 @@ export class Card extends Component {
   stock: number;
   brand: string;
   category: string;
+  idescription: string;
+  ititle: string;
   images: string[];
 
   constructor(parentNode: HTMLElement | null, product: Product) {
@@ -58,6 +60,8 @@ export class Card extends Component {
     this.category = product.category;
     this.stock = product.stock;
     this.images = product.images;
+    this.idescription = product.description;
+    this.ititle = product.title;
 
     // buttons handlers
     btnDetails.addEventListener('click', () => {

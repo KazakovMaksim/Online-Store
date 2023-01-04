@@ -13,6 +13,7 @@ export class ProductsPage extends Component {
   productList: Component;
   productsFound: Component;
   sortOptions: Component;
+  searchStr = '';
   currCheckedList = new Map();
   categoryList: string[] = formCollection(products.products, 'category');
   brandList: string[] = formCollection(products.products, 'brand');
@@ -72,6 +73,21 @@ export class ProductsPage extends Component {
     if (this.stockFilter.paramsList) {
       const [leftVal, rightVal] = this.stockFilter.sliderValues;
       newCards = newCards.filter((card) => card.stock >= +leftVal && card.stock <= +rightVal);
+    }
+
+    if (this.searchStr) {
+      newCards = newCards.filter((card: Card) => {
+        let key: keyof Card;
+        for (key in card) {
+          let cardFeat = card[key];
+          if (typeof cardFeat === 'string' || typeof cardFeat === 'number') {
+            cardFeat = String(cardFeat);
+            if (cardFeat.toLocaleLowerCase().includes(this.searchStr)) {
+              return cardFeat.toLocaleLowerCase().includes(this.searchStr);
+            }
+          }
+        }
+      });
     }
 
     const newProdTable = new Map();
@@ -197,6 +213,14 @@ export class ProductsPage extends Component {
 
     // decorative line - hr
     new Component(listSettings.node, 'div', 'deco-line');
+    const searchContainer = new Component(listSettings.node, 'div', 'search-container');
+    const searchBox = new Component(searchContainer.node, 'input', 'search-box');
+    searchBox.node.setAttribute('type', 'search');
+    searchBox.node.setAttribute('placeholder', 'search product');
+    searchBox.node.oninput = () => {
+      this.searchStr = (searchBox.node as HTMLInputElement).value;
+      this.useFilters();
+    };
 
     // items display buttons
     const buttonsContainer = new Component(listSettings.node, 'div', 'btns-container');

@@ -109,3 +109,10 @@
   align-items: center;
   padding: 8px 0;
 }
+
+.search {
+  &-box {
+    border-radius: 5px;
+    text-align: center;
+  }
+}
