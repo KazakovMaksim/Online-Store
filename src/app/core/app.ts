@@ -6,6 +6,7 @@ import { CartPage } from '../components/CartPage/CartPage';
 import { ProductsPage } from '../components/ProductsPage/ProductsPage';
 import { routing, defaultRoute } from './router';
 import { ProductDetailsPage } from '../components/ProductDetailsPage/productDetails';
+import { CartController } from '../Helpers/cartController';
 
 export class App {
   main = new Component(null, 'main', 'main');
@@ -23,7 +24,12 @@ export class App {
       this.mainContent?.node.remove();
 
       if (!document.body.children.length) {
-        document.body.append(new Header().node, this.main.node, new Footer().node);
+        const header = new Header();
+        CartController.updateCartQty = header.updateCartQty;
+        CartController.updateTotalAmount = header.updateTotalAmount;
+        document.body.append(header.node, this.main.node, new Footer().node);
+        CartController.setCartQty();
+        CartController.setTotalAmount();
       }
 
       if (currentRouteName === 'products') {

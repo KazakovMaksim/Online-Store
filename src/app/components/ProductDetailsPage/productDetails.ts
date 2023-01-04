@@ -1,4 +1,5 @@
 import { products } from '../../data/products';
+import { CartController } from '../../Helpers/cartController';
 import { Product } from '../../types/interface';
 import { Component } from '../component';
 import './productDetails.scss';
@@ -11,7 +12,8 @@ export class ProductDetailsPage extends Component {
     ) as Product;
 
     // primary blocks
-    const breadCrumbsBlock = new Component(
+    // bread crumbs block
+    new Component(
       this.node,
       'div',
       'bread-crumbs-container',
@@ -22,8 +24,6 @@ export class ProductDetailsPage extends Component {
     const photosBlock = new Component(infoBlock.node, 'div', 'photos-container');
     const detailsBlock = new Component(infoBlock.node, 'div', 'details-container');
     const buttonsBlock = new Component(this.node, 'div', 'buttons-container');
-
-    // bread crumbs block
 
     // photos block
     const bigPhotoBlock = new Component(photosBlock.node, 'img', 'big-img');
@@ -59,6 +59,27 @@ export class ProductDetailsPage extends Component {
     // buttons block
     const btnAdd = new Component(buttonsBlock.node, 'button', 'btn btn-desc-add', 'Add to Cart');
     const btnBuyNow = new Component(buttonsBlock.node, 'button', 'btn btn-desc-buy-now', 'Buy Now');
+
+    btnAdd.node.addEventListener('click', () => {
+      if (!this.node.classList.contains('in-cart')) {
+        this.node.classList.add('in-cart');
+        btnAdd.node.textContent = 'Drop from Cart';
+        CartController.add(selectedProduct.id);
+      } else {
+        this.node.classList.remove('in-cart');
+        btnAdd.node.textContent = 'Add to Cart';
+        CartController.remove(selectedProduct.id);
+      }
+    });
+
+    const updateBtnState = () => {
+      if (CartController.getCartItems()?.find((item) => productId === item.id)) {
+        this.node.classList.add('in-cart');
+        btnAdd.node.textContent = 'Drop from Cart';
+      }
+    };
+
+    updateBtnState();
 
     // back button block
     const btnBack = new Component(backButtonBlock.node, 'button', 'btn btn-back', 'Back');
