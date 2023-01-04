@@ -210,6 +210,7 @@ export class ProductsPage extends Component {
   }
 
   fixLastItemsDisplay() {
+    if (!this.productList) return;
     const products = this.productList.node.children;
     [...products].forEach((el) => el.classList.remove('fix-width'));
     if (window.innerWidth > 1239) {
