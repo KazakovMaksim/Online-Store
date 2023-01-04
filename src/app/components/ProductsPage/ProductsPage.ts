@@ -13,6 +13,7 @@ export class ProductsPage extends Component {
   productList: Component;
   productsFound: Component;
   sortOptions: Component;
+  pacifier: Component;
   searchStr = '';
   currCheckedList = new Map();
   categoryList: string[] = formCollection(products.products, 'category');
@@ -28,6 +29,11 @@ export class ProductsPage extends Component {
   updateQtyDisplay() {
     const qty = (this.productList.node as HTMLElement).children.length;
     this.productsFound.node.textContent = String(qty);
+    if (!qty) {
+      this.pacifier.node.classList.add('products-pacifier_active');
+    } else {
+      this.pacifier.node.classList.remove('products-pacifier_active');
+    }
   }
 
   changeProdQtyOnCheckbox(newProdTable: Map<string, number>, card: Card, group: Selector) {
@@ -188,6 +194,13 @@ export class ProductsPage extends Component {
     const productList = new Component(this.productsContainer.node, 'div', 'products-list');
     this.productList = productList;
 
+    // no product pacifier
+    this.pacifier = new Component(
+      this.productsContainer.node,
+      'div',
+      'products-pacifier',
+      'No products found',
+    );
     // settings list components
     this.sortOptions = new Component(listSettings.node, 'select', 'sort-options');
 

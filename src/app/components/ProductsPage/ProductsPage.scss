@@ -1,3 +1,22 @@
+.products {
+  &-pacifier {
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #653780;
+    color: #F89F5B;
+    font-weight: 600;
+    font-size: 2rem;
+    opacity: 0.8;
+    border-radius: 10px;
+    &_active {
+      display: flex;
+    }
+  }
+}
+
 .products-page {
   display: flex;
   justify-content: space-between;
