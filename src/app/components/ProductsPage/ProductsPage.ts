@@ -14,6 +14,7 @@ export class ProductsPage extends Component {
   productsFound: Component;
   sortOptions: Component;
   pacifier: Component;
+  btnGridDisplay: Component;
   searchStr = '';
   currCheckedList = new Map();
   categoryList: string[] = formCollection(products.products, 'category');
@@ -184,6 +185,7 @@ export class ProductsPage extends Component {
     const rangePrice = countRange(this.filterCards, 'price');
     const rangeStock = countRange(this.filterCards, 'stock');
     this.changeSliderFilterVal(rangePrice, rangeStock);
+    this.btnGridDisplay.node.dispatchEvent(new Event('click'));
   };
 
   constructor(parentNode: HTMLElement | null) {
@@ -254,6 +256,7 @@ export class ProductsPage extends Component {
     const btnRowDisplay = new Component(buttonsContainer.node, 'button', 'btn btn-row-display');
     new Component(btnGridDisplay.node, 'img', 'grid-icon');
     new Component(btnRowDisplay.node, 'img', 'row-icon');
+    this.btnGridDisplay = btnGridDisplay;
     const paramsListDisplay = new URL(window.location.href).searchParams.getAll('display')[0];
     const activeDisplayBtn = paramsListDisplay === 'row' ? btnRowDisplay : btnGridDisplay;
     activeDisplayBtn.node.classList.add('active');
