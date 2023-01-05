@@ -170,18 +170,26 @@ export class ProductsPage extends Component {
     this.stockFilter.fillBoxValues(rangeStock);
   }
 
-  resetFilters = () => {
-    this.brandFilter.filterCheckboxes.forEach(
-      (checkbox) => ((checkbox.node as HTMLInputElement).checked = false),
-    );
-    this.categoryFilter.filterCheckboxes.forEach(
-      (checkbox) => ((checkbox.node as HTMLInputElement).checked = false),
-    );
+  resetFilters = (searchBox: Component) => {
+    this.brandFilter.filterCheckboxes.forEach((checkbox) => {
+      (checkbox.node as HTMLInputElement).classList.remove('filter-check_active');
+      (checkbox.node as HTMLInputElement).checked = false;
+    });
+    this.categoryFilter.filterCheckboxes.forEach((checkbox) => {
+      (checkbox.node as HTMLInputElement).classList.remove('filter-check_active');
+      (checkbox.node as HTMLInputElement).checked = false;
+    });
     this.filterCards = [...this.allCards];
     const newUrl = new URL(window.location.href);
     history.pushState(null, '', `${newUrl.origin}/${newUrl.hash}`);
     (this.sortOptions.node as HTMLSelectElement).selectedIndex = 0;
-    this.loadCards();
+    this.categoryFilter.queryParamsStr = '';
+    this.brandFilter.queryParamsStr = '';
+    this.priceFilter.paramsList = '';
+    this.stockFilter.paramsList = '';
+    this.searchStr = '';
+    (searchBox.node as HTMLInputElement).value = '';
+    this.useFilters();
     const rangePrice = countRange(this.filterCards, 'price');
     const rangeStock = countRange(this.filterCards, 'stock');
     this.changeSliderFilterVal(rangePrice, rangeStock);
@@ -292,7 +300,7 @@ export class ProductsPage extends Component {
     const filterButtons = new Component(this.controlsContainer.node, 'div', 'filter-buttons');
     const resetFilterBtn = new Component(filterButtons.node, 'button', 'btn', 'Reset Filters');
     resetFilterBtn.node.onclick = () => {
-      this.resetFilters();
+      this.resetFilters(searchBox);
     };
     const copyLinkBtn = new Component(filterButtons.node, 'button', 'btn', 'Copy Link');
     copyLinkBtn.node.onclick = () => {
