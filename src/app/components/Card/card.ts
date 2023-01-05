@@ -1,3 +1,4 @@
+import { CartController } from '../../Helpers/cartController';
 import { Product } from '../../types/interface';
 import { Component } from '../component';
 import './card.scss';
@@ -17,6 +18,20 @@ export class Card extends Component {
   idescription: string;
   ititle: string;
   images: string[];
+
+  btnAdd: HTMLElement;
+
+  updateCardState(event: Event | null) {
+    if (!this.node.classList.contains('in-cart')) {
+      if (event) CartController.add(this.id);
+      this.node.classList.add('in-cart');
+      this.btnAdd.textContent = 'Drop from Cart';
+    } else {
+      if (event) CartController.remove(this.id);
+      this.node.classList.remove('in-cart');
+      this.btnAdd.textContent = 'Add to Cart';
+    }
+  }
 
   constructor(parentNode: HTMLElement | null, product: Product) {
     // visible card's pieces
@@ -38,7 +53,7 @@ export class Card extends Component {
     this.price = product.price;
     const btnDetails = new Component(priceAddContainer.node, 'button', 'btn btn-details', 'Details')
       .node;
-    const btnAdd = new Component(
+    this.btnAdd = new Component(
       priceAddContainer.node,
       'button',
       'btn btn-add-product',
@@ -66,6 +81,10 @@ export class Card extends Component {
     // buttons handlers
     btnDetails.addEventListener('click', () => {
       window.location.hash = `product-details/${this.id}`;
+    });
+
+    this.btnAdd.addEventListener('click', (event) => {
+      this.updateCardState(event);
     });
   }
 }

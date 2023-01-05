@@ -5,10 +5,12 @@ import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
 import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
-import { Product, Selector } from '../../types/interface';
+import { Product, Selector, CartItem } from '../../types/interface';
+import { CartController } from '../../Helpers/cartController';
 
 export class ProductsPage extends Component {
-  controlsContainer = new Component(this.node, 'div', 'controls-container');
+  controlsWrapper = new Component(this.node, 'div', 'controls-wrapper');
+  controlsContainer = new Component(this.controlsWrapper.node, 'div', 'controls-container');
   productsContainer = new Component(this.node, 'div', 'products-container');
   productList: Component;
   productsFound: Component;
@@ -162,6 +164,15 @@ export class ProductsPage extends Component {
       this.stockFilter.fillBoxValues(['-', '-']);
     }
   }
+  pageLoaded() {
+    const cartItems = CartController.getCartItems();
+    cartItems?.forEach((item: CartItem) => {
+      const CardInCart = this.allCards.find((card: Card) => card.id === item.id);
+      CardInCart?.updateCardState(null);
+    });
+    CartController.setCartQty();
+    CartController.setTotalAmount();
+  }
 
   changeSliderFilterVal(rangePrice: string[], rangeStock: string[]) {
     this.priceFilter.slider.noUiSlider?.set(rangePrice);
@@ -198,6 +209,8 @@ export class ProductsPage extends Component {
 
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'products-page wrapper');
+
+    this.controlsWrapper.node.append(new Component(null, 'div', 'controls-filler').node);
 
     // two main blocks in product-container
     const listSettings = new Component(this.productsContainer.node, 'article', 'list-settings');
@@ -352,6 +365,8 @@ export class ProductsPage extends Component {
     this.fixLastItemsDisplay();
 
     window.addEventListener('resize', this.fixLastItemsDisplay);
+
+    this.pageLoaded();
   }
 
   fixLastItemsDisplay() {

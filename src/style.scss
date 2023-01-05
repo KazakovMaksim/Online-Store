@@ -30,9 +30,22 @@ body{
   margin: 0;
 }
 
+.main{
+  z-index: 0;
+  position: relative;
+  min-height: 100vh;
+}
+
 .wrapper{
   max-width: 1250px;
   margin: 0 auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.btn{
+  font-family: "Baloo2";
+  line-height: 1.2;
 }
 
 @media screen and (max-width: 650px) {
