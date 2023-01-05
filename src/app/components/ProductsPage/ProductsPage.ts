@@ -292,6 +292,12 @@ export class ProductsPage extends Component {
       this.resetFilters();
     };
     const copyLinkBtn = new Component(filterButtons.node, 'button', 'btn', 'Copy Link');
+    copyLinkBtn.node.onclick = () => {
+      copyLinkBtn.node.innerText = 'Copied !';
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        setTimeout(() => (copyLinkBtn.node.innerText = 'Copy Link'), 500);
+      });
+    };
 
     this.categoryFilter = new CheckboxFilter(this.categoryList, 'category', this.allCards);
     this.categoryFilter.onCheckbox = () => {
