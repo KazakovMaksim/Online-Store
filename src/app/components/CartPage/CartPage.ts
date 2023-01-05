@@ -65,6 +65,7 @@ export class CartPage extends Component {
           ' Fill It Now!',
         );
         (linkToProducts.node as HTMLAnchorElement).href = '#products';
+        window.scrollTo(0, 0);
       } else if (limit && page) {
         cartItemsList.node.textContent = '';
         CartItems?.forEach((item, index) => {
