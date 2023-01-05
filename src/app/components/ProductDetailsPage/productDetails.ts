@@ -26,22 +26,21 @@ export class ProductDetailsPage extends Component {
     const buttonsBlock = new Component(this.node, 'div', 'buttons-container');
 
     // photos block
-    const bigPhotoBlock = new Component(photosBlock.node, 'img', 'big-img');
+    const bigPhotoBlock = new Component(photosBlock.node, 'div', 'big-img');
     const photosList = new Component(photosBlock.node, 'div', 'photos-list');
 
-    (bigPhotoBlock.node as HTMLImageElement).src = String(selectedProduct?.thumbnail);
+    bigPhotoBlock.node.style.backgroundImage = `url(${String(selectedProduct?.thumbnail)})`;
     selectedProduct?.images.forEach((img) => {
       const photoItem = new Component(photosList.node, 'div', 'photo-item');
       photoItem.node.style.backgroundImage = `url(${img})`;
       photoItem.node.addEventListener('click', () => {
-        (bigPhotoBlock.node as HTMLImageElement).src = String(img);
+        bigPhotoBlock.node.style.backgroundImage = `url(${String(img)})`;
         for (const listItem of photosList.node.children) {
           listItem.classList.remove('selected');
         }
         (photoItem.node as HTMLImageElement).classList.add('selected');
       });
-      if (img === (bigPhotoBlock.node as HTMLImageElement).src)
-        photoItem.node.classList.add('selected');
+      if (img === selectedProduct?.thumbnail) photoItem.node.classList.add('selected');
     });
 
     // details block
