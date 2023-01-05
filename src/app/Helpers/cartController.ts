@@ -59,21 +59,28 @@ export class CartController {
   static updateTotalAmount: (amount: number) => void = () => null;
 
   static setCartQty() {
-    let qty = 0;
-    const cartItems = this.getCartItems();
-    cartItems?.forEach((item) => (qty += item.quantity));
-    this.updateCartQty(qty);
+    this.updateCartQty(this.getItemsQty());
   }
 
   static setTotalAmount() {
+    this.updateTotalAmount(this.getTotalAmount());
+  }
+
+  static getTotalAmount() {
     let amount = 0;
     const cartItems = this.getCartItems();
     cartItems?.forEach((item) => (amount += item.cost * item.quantity));
-    this.updateTotalAmount(amount);
+    return amount;
   }
 
   static getItemQty(id: number) {
     const items = this.getCartItems();
     return items?.find((item) => item.id === id)?.quantity;
+  }
+
+  static getItemsQty() {
+    let qty = 0;
+    this.getCartItems()?.forEach((item) => (qty += item.quantity));
+    return qty;
   }
 }
