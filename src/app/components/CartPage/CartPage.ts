@@ -50,7 +50,6 @@ export class CartPage extends Component {
       const page = Pagination.getPage();
       if (cartLength === 0) {
         summary?.destroy();
-        console.log('kill', this.summary);
         this.emptyMsg?.destroy();
         cartContainer.destroy();
         this.emptyMsg = new Component(

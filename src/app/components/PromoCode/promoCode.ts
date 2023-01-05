@@ -25,7 +25,6 @@ export class PromoCode extends Component {
       button = new Component(this.node, 'button', 'btn promo-desc', 'ADD');
       button.node.addEventListener('click', () => {
         currentCode.added = true;
-        console.log(promoCodes.find((code) => code.name === name.toLowerCase()));
         this.destroy();
         blockIn.node.classList.add('display-flex');
         new PromoCode(blockIn.node, name, description, discount, blockIn, invokeComponent, 'DROP');
