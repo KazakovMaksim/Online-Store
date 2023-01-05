@@ -1,0 +1,164 @@
+.summary-block{
+  font-family: 'Signika';
+  padding: 20px 15px;
+  flex: 1 0;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  
+
+  .btn{
+    padding: 5px;
+    line-height: 1;
+  }
+
+  .btn-buy-now{
+    font-family: inherit;
+    padding: 10px 30px;
+    font-size: 1.3rem;
+    align-self: center;
+    background-color: #F89F5B;
+    color: black;
+    border: 2px solid transparent;
+
+    &:hover{
+      border: 2px solid #653780;;
+      background-color: #f99a52;
+      color: black;
+    }
+  }
+
+  .summary-header{
+    font-family: 'Kenia';
+    font-size: 2rem;
+    color: #F89F5B;
+    flex: 0 1;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(96, 96, 96, 0.335);
+  }
+
+  .purchase-block{
+    font-size: 1.5rem;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .products-label{
+
+    font-size: inherit;
+  }
+
+  .total-label{
+    font-size: inherit;
+  }
+
+  .input-promo{
+    font-family: inherit;
+    border: none;
+    border-radius: 30px;
+    border: 2px solid orange;
+    padding: 5px;
+    width: fit-content;
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+    background-color: #653780;
+    text-align: center;
+    font-size: 1.1rem;
+
+    color: #F89F5B;
+    &::placeholder{
+      font-size: 1.1rem;
+      color: #F89F5B;
+      opacity: 0.8;
+    }
+
+    &:focus{
+      outline: none;
+    }
+  }
+
+  .promo-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .applied-codes-container{
+    align-items: center;
+    display: none;
+  }
+
+  .display-flex{
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .total-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    & span {
+      color: #E53F71;
+    }
+  }
+
+  .products-qty{
+    color: #E53F71;
+  }
+
+  .new-total-label{
+    font-size: inherit;
+    display: none;
+  }
+
+  .display-block{
+    display: block;
+  }
+
+
+  .line-through{
+    text-decoration: line-through;
+    text-decoration-color: #653780;
+  }
+
+
+
+  .applied-codes-header{
+    font-size: inherit;
+    border-bottom: 2px solid rgba(221, 145, 29, 0.335);
+    width: fit-content;
+  }
+
+  .promo-code{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .test-promo{
+    font-size: 1.2rem;
+    color: red;
+    opacity: 0.6;
+    font-weight: 600;
+  }
+}
+
+@media screen and (max-width: 1060px){
+  .summary-block{
+    .summary-header{
+      padding-bottom: 50px;
+    }
+  }
+}

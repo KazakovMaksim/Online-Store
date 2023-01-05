@@ -1,21 +1,29 @@
+import { promoCodes } from '../../constants/promo-codes';
 import { CartController } from '../../Helpers/cartController';
 import { Pagination } from '../../Helpers/pagination';
 import { CartItem } from '../CartItem/cartItem';
 import { Component } from '../component';
+import { Summary } from '../Summary/summary';
 import './CartPage.scss';
 
 export class CartPage extends Component {
-  updateCartItemsList: () => void;
-  setMaxPages: () => void;
   maxPages = 1;
   emptyMsg: Component | null = null;
+  summary: Component | null = null;
+  updateCartItemsList: () => void;
+  setMaxPages: () => void;
+  updateSummary: () => void;
 
   constructor(parentNode: HTMLElement | null) {
+    promoCodes.forEach((code) => {
+      code.added = false;
+    });
     super(parentNode, 'div', 'cart-page wrapper');
 
     const cartContainer = new Component(this.node, 'div', 'cart-page-container');
     const summaryContainer = new Component(this.node, 'div', 'summary-container');
-
+    const summary = new Summary(summaryContainer.node);
+    this.updateSummary = summary.showNewPrice;
     const pagination = new Component(cartContainer.node, 'div', 'pagination-block');
     new Component(pagination.node, 'h2', 'page-header', 'Products in Cart');
 
@@ -41,6 +49,8 @@ export class CartPage extends Component {
       const limit = Number(Pagination.getLimit());
       const page = Pagination.getPage();
       if (cartLength === 0) {
+        summary?.destroy();
+        console.log('kill', this.summary);
         this.emptyMsg?.destroy();
         cartContainer.destroy();
         this.emptyMsg = new Component(
@@ -72,7 +82,7 @@ export class CartPage extends Component {
       this.updateCartItemsList();
     };
 
-    const currentPage = Pagination.getPage();
+    const currentPage = Pagination.getPage() || 1;
     if (currentPage) updatePageNumber(currentPage);
 
     this.setMaxPages = () => {
@@ -98,6 +108,7 @@ export class CartPage extends Component {
           this.setMaxPages();
         }
       if (value) Pagination.setLimit(value);
+      else Pagination.setLimit(3);
       this.setMaxPages();
     };
 

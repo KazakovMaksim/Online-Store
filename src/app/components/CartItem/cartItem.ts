@@ -83,6 +83,7 @@ export class CartItem extends Component {
           CartController.add(productId);
           updateItem(itemQty + 1);
         }
+        cartPage.updateSummary();
       });
 
       const dropFromCart = () => {
@@ -90,6 +91,7 @@ export class CartItem extends Component {
         this.destroy();
         this.cartPage.setMaxPages();
         this.cartPage.updateCartItemsList();
+        cartPage.updateSummary();
       };
 
       btnDown.node.addEventListener('click', () => {
@@ -100,6 +102,7 @@ export class CartItem extends Component {
           CartController.decreaseItemQty(productId);
           updateItem(itemQty - 1);
         }
+        cartPage.updateSummary();
       });
 
       // remove button
