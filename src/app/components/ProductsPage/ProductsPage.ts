@@ -250,17 +250,18 @@ export class ProductsPage extends Component {
 
     // items display buttons
     const buttonsContainer = new Component(listSettings.node, 'div', 'btns-container');
-    const btnGridDisplay = new Component(
-      buttonsContainer.node,
-      'button',
-      'btn btn-grid-display active',
-    );
+    const btnGridDisplay = new Component(buttonsContainer.node, 'button', 'btn btn-grid-display');
     const btnRowDisplay = new Component(buttonsContainer.node, 'button', 'btn btn-row-display');
     new Component(btnGridDisplay.node, 'img', 'grid-icon');
     new Component(btnRowDisplay.node, 'img', 'row-icon');
+    const paramsListDisplay = new URL(window.location.href).searchParams.getAll('display')[0];
+    const activeDisplayBtn = paramsListDisplay === 'row' ? btnRowDisplay : btnGridDisplay;
+    activeDisplayBtn.node.classList.add('active');
 
     function changeItemsDisplay(event: Event) {
       const currentBtn = event.currentTarget as HTMLElement;
+      const paramsList = new URL(window.location.href).searchParams.getAll('display')[0];
+      const displayVal = currentBtn.classList.contains('btn-row-display') ? 'row' : 'grid';
       for (const button of buttonsContainer.node.children) {
         button.classList.remove('active');
       }
@@ -268,11 +269,14 @@ export class ProductsPage extends Component {
       if (currentBtn.classList.contains('btn-row-display'))
         productList.node.classList.add('row-display');
       else productList.node.classList.remove('row-display');
+      if (event.isTrusted) updateQueryInURL(displayVal, 'display', paramsList);
     }
 
     for (const button of buttonsContainer.node.children) {
       button.addEventListener('click', changeItemsDisplay);
     }
+    const displayBtnClickEvent = new Event('click');
+    activeDisplayBtn.node.dispatchEvent(displayBtnClickEvent);
 
     products.products.forEach((product: Product) =>
       this.allCards.push(new Card(this.productList.node, product)),
