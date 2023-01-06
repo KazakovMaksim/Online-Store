@@ -267,7 +267,14 @@ export class ProductsPage extends Component {
       if (this.searchStr) {
         updateQueryInURL(this.searchStr, 'search', paramsList);
       } else {
-        this.brandFilter.updateQueryInURL(this.searchStr, 'search', 'del');
+        const newUrl = new URL(window.location.href);
+        const queryParamsStr = new URL(window.location.href).searchParams.getAll('search')[0];
+        if (window.location.href.indexOf('?') < 0) {
+          newUrl.searchParams.set('search', this.searchStr);
+        } else {
+          changeQueryParameterValues(this.searchStr, 'search', 'del', queryParamsStr, newUrl);
+        }
+        history.pushState(null, '', newUrl.href);
       }
     };
 
