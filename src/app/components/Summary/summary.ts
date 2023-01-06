@@ -7,6 +7,7 @@ import './summary.scss';
 export class Summary extends Component {
   checkForCodes: () => void;
   showNewPrice: () => void;
+  OnBuyNow: () => void = () => null;
 
   constructor(parentNode: HTMLElement | null) {
     super(parentNode, 'div', 'summary-block');
@@ -52,6 +53,10 @@ export class Summary extends Component {
       'btn btn-buy-now',
       'BUY NOW',
     );
+
+    buttonBuyNow.node.onclick = () => {
+      this.OnBuyNow();
+    };
 
     this.checkForCodes = () => {
       const input = promoInput.node as HTMLInputElement;
