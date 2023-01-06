@@ -1,16 +1,18 @@
 import { Component } from '../component';
-import { changeQueryParameterValues } from '../../helpers/filter';
+import { changeQueryParameterValues, countProductAmount } from '../../helpers/filter';
 import './CheckboxFilter.scss';
+import { Card } from '../Card/card';
 
 export class CheckboxFilter extends Component {
   filterGroup = new Component(null, 'div', 'filter-group');
   queryParamsStr: string;
+  filterCheckboxes: Component[] = [];
+  stockAmount = new Map();
 
-  onCheckbox: () => void = () => console.log();
+  onCheckbox: () => void = () => null;
 
-  constructor(groups: string[], filterListName: string) {
+  constructor(groups: string[], filterListName: string, allCards: Card[]) {
     super(null, 'div', 'filter');
-
     this.queryParamsStr = new URL(window.location.href).searchParams.getAll(filterListName)[0];
     new Component(this.node, 'p', 'filter-title', filterListName);
     this.node.append(this.filterGroup.node);
@@ -18,17 +20,32 @@ export class CheckboxFilter extends Component {
     groups.forEach((group, i) => {
       const filterField = new Component(this.filterGroup.node, 'div', 'filter-field');
 
-      const checkbox = new Component(null, 'input', 'checkbox_filter-check');
+      const checkbox = new Component(null, 'input', 'filter-check');
+      this.filterCheckboxes.push(checkbox);
       checkbox.node.setAttribute('type', 'checkbox');
       if (this.queryParamsStr && this.queryParamsStr.indexOf(group) >= 0) {
-        checkbox.node.setAttribute('checked', '');
+        (checkbox.node as HTMLInputElement).checked = true;
+        (checkbox.node as HTMLInputElement).classList.add('filter-check_active');
       }
 
       const label = new Component(null, 'label', 'checkbox_filter-label', group);
-      filterField.node.append(checkbox.node, label.node);
       if (i >= 5) {
         filterField.node.classList.add('hidden');
       }
+
+      const categoriesTable = countProductAmount(allCards, 'category');
+      const brandsTable = countProductAmount(allCards, 'brand');
+      const amount =
+        filterListName === 'brand' ? brandsTable.get(group) : categoriesTable.get(group);
+      const current = filterListName === 'brand' ? 0 : amount;
+      const stockAmount = new Component(
+        null,
+        'span',
+        'filter-amount filter-amount_active',
+        `${current}/${amount}`,
+      );
+      filterField.node.append(checkbox.node, label.node, stockAmount.node);
+      this.stockAmount.set(group, { span: stockAmount, current: amount, stock: amount });
 
       checkbox.node.onclick = () => {
         if ((checkbox.node as HTMLInputElement).checked) {
@@ -36,6 +53,7 @@ export class CheckboxFilter extends Component {
         } else {
           this.updateQueryInURL(group, filterListName, 'del');
         }
+        (checkbox.node as HTMLInputElement).classList.toggle('filter-check_active');
         this.onCheckbox();
       };
     });
@@ -58,6 +76,11 @@ export class CheckboxFilter extends Component {
         child.classList.toggle('hidden');
       }
     });
+  }
+
+  drawProductAmount(name: string, amount: string) {
+    const node = this.stockAmount.get(name).span.node;
+    node.innerText = `${amount}/${node.innerText.split('/')[1]}`;
   }
 
   updateQueryInURL(parameterValue: string, parameterName: string, operation: string) {
