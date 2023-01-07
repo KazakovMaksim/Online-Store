@@ -9,9 +9,10 @@ export class SliderFilter extends Component {
   rangeContainer: Component;
   slider: target;
   sliderValues: string[];
+  sliderBoxes: Component[];
   paramsList: string;
 
-  onSlider: () => void = () => console.log();
+  onSlider: () => void = () => null;
 
   constructor(filterListName: string, filterRange: string[]) {
     super(null, 'div', 'filter');
@@ -26,6 +27,7 @@ export class SliderFilter extends Component {
     const filterInfo = new Component(this.node, 'div', 'filter-info');
     const filterFrom = new Component(filterInfo.node, 'div', 'filter-from', min);
     const filterTo = new Component(filterInfo.node, 'div', 'filter-to', max);
+    this.sliderBoxes = [filterFrom, filterTo];
 
     this.rangeContainer = new Component(this.node, 'div', 'range-container');
     noUiSlider.create(this.rangeContainer.node, {
@@ -38,7 +40,7 @@ export class SliderFilter extends Component {
     });
 
     this.slider = this.rangeContainer.node as target;
-    this.slider.noUiSlider?.on('update', () => {
+    this.slider.noUiSlider?.on('slide', () => {
       const [leftVal, rightVal] = [this.slider.noUiSlider?.get(true)]
         .toString()
         .split(',')
@@ -53,5 +55,11 @@ export class SliderFilter extends Component {
       this.paramsList = new URL(window.location.href).searchParams.getAll(filterListName)[0];
       this.onSlider();
     });
+  }
+
+  fillBoxValues(range: string[]) {
+    const [filterFrom, filterTo] = this.sliderBoxes;
+    filterFrom.node.innerText = range[0] ? range[0] : '-';
+    filterTo.node.innerText = range[1] ? range[1] : '-';
   }
 }

@@ -43,8 +43,6 @@ export class Header extends Component {
     };
 
     cartButton.node.addEventListener('click', () => {
-      console.log('click');
-
       window.location.href = '#cart';
     });
   }

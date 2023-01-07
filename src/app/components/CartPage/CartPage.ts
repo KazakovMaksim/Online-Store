@@ -56,7 +56,6 @@ export class CartPage extends Component {
       const page = Pagination.getPage();
       if (cartLength === 0) {
         summary?.destroy();
-        console.log('kill', this.summary);
         this.emptyMsg?.destroy();
         cartContainer.destroy();
         this.emptyMsg = new Component(
@@ -72,6 +71,7 @@ export class CartPage extends Component {
           ' Fill It Now!',
         );
         (linkToProducts.node as HTMLAnchorElement).href = '#products';
+        window.scrollTo(0, 0);
       } else if (limit && page) {
         cartItemsList.node.textContent = '';
         CartItems?.forEach((item, index) => {
@@ -104,11 +104,10 @@ export class CartPage extends Component {
     };
 
     const updateLimit = (value?: number) => {
-      const limit = Pagination.getLimit();
       const cartItems = CartController.getCartItems();
-      (limitInput.node as HTMLInputElement).value = limit || '3';
+      (limitInput.node as HTMLInputElement).value = value ? value?.toString() : '3';
       if (cartItems?.length)
-        if (Number(limit) > cartItems.length) {
+        if (Number(value) > cartItems.length) {
           Pagination.setLimit(cartItems.length);
           (limitInput.node as HTMLInputElement).value = cartItems.length.toString();
           this.setMaxPages();
@@ -118,7 +117,7 @@ export class CartPage extends Component {
       this.setMaxPages();
     };
 
-    updateLimit();
+    updateLimit(Number(Pagination.getLimit()));
     this.updateCartItemsList();
 
     pageDown.node.addEventListener('click', () => {
