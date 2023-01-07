@@ -51,7 +51,7 @@ export class App {
         this.main.node.append(this.mainContent.node);
       }
     };
-
+    window.location.hash = '#products';
     const popstateEvent = new Event('popstate');
     window.dispatchEvent(popstateEvent);
   };
