@@ -31,6 +31,22 @@ export class Modal extends Component {
       'title',
       'field must have at least two words with min length 3 letters',
     );
+
+    this.address.node.setAttribute(
+      'title',
+      'field must have at least tree words with min length 5 letters',
+    );
+
+    this.phone.node.setAttribute(
+      'title',
+      'field must start with a plus, contain only numbers and have a maximum length - 9 characters',
+    );
+    this.phone.node.oninput = () => {
+      this.restrictPhoneNumberInput();
+    };
+
+    this.mail.node.setAttribute('title', 'field must contain correct e-mail address');
+
     new Component(formContainer.node, 'h3', 'form-title', 'credit card details');
 
     const cardContainer = new Component(formContainer.node, 'div', 'card-container');
@@ -98,6 +114,20 @@ export class Modal extends Component {
     this.node.onclick = (e) => {
       if (e.target === this.node) this.node.classList.remove('modal-active');
     };
+  }
+
+  restrictPhoneNumberInput() {
+    const curValue = (this.phone.node as HTMLInputElement).value;
+    const prevValue = curValue.slice(0, curValue.length - 1);
+    const last = curValue.slice(curValue.length - 1);
+
+    if (curValue.length === 1 && curValue !== '+') {
+      (this.phone.node as HTMLInputElement).value = curValue.replace(/./g, '');
+    } else if (curValue.length >= 2 && curValue.length <= 10 && !/\d/.test(last)) {
+      (this.phone.node as HTMLInputElement).value = prevValue;
+    } else if (curValue.length > 10) {
+      (this.phone.node as HTMLInputElement).value = prevValue;
+    }
   }
 
   checkWordsNum(str: string, minWordsNum: number) {
