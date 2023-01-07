@@ -16,3 +16,5 @@ export const imgSrc = [
   '../../../assets/img/mastercard.png',
   '../../../assets/img/maestro.png',
 ];
+
+export const confirmText = 'Thanks for your order. You will be redirected to the store soon.';

@@ -1,6 +1,7 @@
 import { Component } from '../component';
-import { tittles, personalData, cardData, imgSrc } from '../../constants/modal';
+import { tittles, personalData, cardData, imgSrc, confirmText } from '../../constants/modal';
 import './Modal.scss';
+import { CartController } from '../../Helpers/cartController';
 
 export class Modal extends Component {
   formInfo: Component;
@@ -14,6 +15,9 @@ export class Modal extends Component {
     super(parentNode, 'div', 'modal');
 
     const formContainer = new Component(this.node, 'div', 'form-container');
+    const overlay = new Component(this.node, 'div', 'overlay');
+    overlay.node.append(new Component(overlay.node, 'p', 'overlay-congrat', confirmText).node);
+
     new Component(formContainer.node, 'h3', 'form-title', 'personal data');
     this.formInfo = new Component(formContainer.node, 'form', 'form-info');
 
@@ -82,19 +86,8 @@ export class Modal extends Component {
       if (elem === 'Expire') this.expire = input;
 
       input.node.oninput = () => {
-        (input.node as HTMLInputElement).value = (input.node as HTMLInputElement).value.replace(
-          /[^\d]/g,
-          '',
-        );
-      };
-      (this.expire?.node as HTMLInputElement).oninput = () => {
-        (this.expire?.node as HTMLInputElement).value = (
-          this.expire?.node as HTMLInputElement
-        ).value.replace(/[^[/]\d]/g, '');
-        if ((this.expire?.node as HTMLInputElement).value.length === 2) {
-          (this.expire?.node as HTMLInputElement).value =
-            (this.expire?.node as HTMLInputElement).value + '/';
-        }
+        const expire = input.node as HTMLInputElement;
+        expire.value = expire.value.replace(/[^\d]/g, '');
       };
     });
     const confirmBtn = new Component(formContainer.node, 'button', 'form-btn', 'confirm');
@@ -105,9 +98,21 @@ export class Modal extends Component {
       const addressVal = (this.address.node as HTMLInputElement).value;
       console.log('checkAddressInp=', this.checkNameOrAddressInp(addressVal, 'address'));
 
-      this.node.classList.remove('modal-active');
       (this.formInfo.node as HTMLFormElement).reset();
+
+      const items = CartController.getCartItems();
+      items?.forEach((elem) => {
+        CartController.remove(elem.id);
+      });
+
+      overlay.node.classList.add('overlay_active');
+
+      setTimeout(() => {
+        this.node.classList.remove('modal-active');
+        window.location.hash = 'products';
+      }, 3000);
     };
+
     this.node.onclick = (e) => {
       if (e.target === this.node) this.node.classList.remove('modal-active');
     };
