@@ -1,4 +1,5 @@
 import { Component } from '../component';
+import { tittles, personalData, cardData } from '../../constants/modal';
 import './Modal.scss';
 
 export class Modal extends Component {
@@ -16,36 +17,21 @@ export class Modal extends Component {
     new Component(formContainer.node, 'h3', 'form-title', 'personal data');
     this.formInfo = new Component(formContainer.node, 'form', 'form-info');
 
-    [this.name, this.phone, this.address, this.mail] = [
-      'name',
-      'phone number',
-      'delivery address',
-      'e-mail',
-    ].map((elem) => {
+    [this.name, this.phone, this.address, this.mail] = personalData.map((elem) => {
       const inputBox = new Component(this.formInfo.node, 'div', 'input-box');
       const input = new Component(inputBox.node, 'input', 'input');
       input.node.setAttribute('placeholder', elem);
       return input;
     });
-    this.name.node.setAttribute(
-      'title',
-      'field must have at least two words with min length 3 letters',
-    );
 
-    this.address.node.setAttribute(
-      'title',
-      'field must have at least tree words with min length 5 letters',
-    );
+    this.name.node.setAttribute('title', tittles.name);
+    this.address.node.setAttribute('title', tittles.address);
+    this.phone.node.setAttribute('title', tittles.phone);
+    this.mail.node.setAttribute('title', tittles.mail);
 
-    this.phone.node.setAttribute(
-      'title',
-      'field must start with a plus, contain only numbers and have a maximum length - 9 characters',
-    );
     this.phone.node.oninput = () => {
       this.restrictPhoneNumberInput();
     };
-
-    this.mail.node.setAttribute('title', 'field must contain correct e-mail address');
 
     new Component(formContainer.node, 'h3', 'form-title', 'credit card details');
 
@@ -75,7 +61,7 @@ export class Modal extends Component {
 
     const cardValidity = new Component(fieldset.node, 'div', 'card-validity');
     const cardInputs = new Component(cardValidity.node, 'div', 'card-inputs');
-    ['Expire', 'Cvc'].forEach((elem) => {
+    cardData.forEach((elem) => {
       const label = new Component(cardInputs.node, 'label', 'card-label', elem);
       label.node.setAttribute('for', elem);
       const input = new Component(cardInputs.node, 'input');
