@@ -3,7 +3,12 @@ import { Card } from '../Card/card';
 import { products } from '../../data/products';
 import { CheckboxFilter } from '../CheckboxFilter/CheckboxFilter';
 import './ProductsPage.scss';
-import { countRange, formCollection, updateQueryInURL } from '../../helpers/filter';
+import {
+  changeQueryParameterValues,
+  countRange,
+  formCollection,
+  updateQueryInURL,
+} from '../../helpers/filter';
 import { SliderFilter } from '../SliderFilter/SliderFilter';
 import { Product, Selector, CartItem } from '../../types/interface';
 import { CartController } from '../../Helpers/cartController';
