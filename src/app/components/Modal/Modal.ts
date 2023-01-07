@@ -1,5 +1,5 @@
 import { Component } from '../component';
-import { tittles, personalData, cardData } from '../../constants/modal';
+import { tittles, personalData, cardData, imgSrc } from '../../constants/modal';
 import './Modal.scss';
 
 export class Modal extends Component {
@@ -55,9 +55,20 @@ export class Modal extends Component {
           '',
         );
       };
+      if (i === 0) {
+        input.node.addEventListener('input', () => {
+          const curValue = (input.node as HTMLInputElement).value;
+          if (+curValue[0] > 3 && +curValue[0] < 7) {
+            const newSrc = imgSrc[+curValue[0] - 3];
+            logo.node.setAttribute('src', newSrc);
+          } else if (+curValue[0] <= 3 || +curValue[0] >= 7 || curValue.length === 0) {
+            logo.node.setAttribute('src', imgSrc[0]);
+          }
+        });
+      }
     });
 
-    logo.node.setAttribute('src', '../../../assets/img/maestro.png');
+    logo.node.setAttribute('src', imgSrc[0]);
 
     const cardValidity = new Component(fieldset.node, 'div', 'card-validity');
     const cardInputs = new Component(cardValidity.node, 'div', 'card-inputs');

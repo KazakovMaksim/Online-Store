@@ -9,3 +9,10 @@ export const tittles = {
 export const personalData = ['name', 'phone number', 'delivery address', 'e-mail'];
 
 export const cardData = ['Expire', 'Cvc'];
+
+export const imgSrc = [
+  '../../../assets/img/pay-system.png',
+  '../../../assets/img/visa.png',
+  '../../../assets/img/mastercard.png',
+  '../../../assets/img/maestro.png',
+];
