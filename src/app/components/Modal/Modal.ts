@@ -135,12 +135,16 @@ export class Modal extends Component {
       validationArr = validationArr.filter((validation) => validation === false);
 
       let validation = true;
+      const pattern = /\d{2}\/\d{2}/;
       this.cardData.forEach((input, i) => {
         const node = input.node as HTMLInputElement;
         if (i === 3) {
           validation = this.validateCardNumber();
         }
-        if (i === 4 && (node.value.length !== 5 || +node.value.split('/')[0] > 12)) {
+        if (
+          i === 4 &&
+          (node.value.length !== 5 || +node.value.split('/')[0] > 12 || !pattern.test(node.value))
+        ) {
           validation = false;
           this.errFields.get('expire')?.node.classList.add('card-error_active');
         } else if (i === 4) {
@@ -170,7 +174,10 @@ export class Modal extends Component {
     };
 
     this.node.onclick = (e) => {
-      if (e.target === this.node) this.node.classList.remove('modal-active');
+      if (e.target === this.node) {
+        this.node.classList.remove('modal-active');
+        (this.formInfo.node as HTMLFormElement).reset();
+      }
     };
   }
 
