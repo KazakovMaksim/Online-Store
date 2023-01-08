@@ -55,6 +55,7 @@ export class Modal extends Component {
     const cardNumber = new Component(fieldset.node, 'div', 'card-number');
     const labelNum = new Component(cardNumber.node, 'label', 'card-label', 'card number');
     const errSpan = new Component(cardNumber.node, 'span', 'card-error', `card number error`);
+    this.errFields.set('card number', errSpan);
     labelNum.node.setAttribute('for', 'number1');
     const inputs = new Component(cardNumber.node, 'div', 'card-inputs');
 
@@ -86,6 +87,7 @@ export class Modal extends Component {
     const cardInputs = new Component(cardValidity.node, 'div', 'card-inputs');
     cardDataFields.forEach((elem) => {
       const errSpan = new Component(cardInputs.node, 'span', 'card-error', `${elem} error`);
+      this.errFields.set(elem, errSpan);
       const label = new Component(cardInputs.node, 'label', 'card-label', elem);
       label.node.setAttribute('for', elem);
       const input = new Component(cardInputs.node, 'input');
@@ -120,7 +122,27 @@ export class Modal extends Component {
 
       validationArr = validationArr.filter((validation) => validation === false);
 
-      if (!validationArr.length) {
+      let validation = true;
+      this.cardData.forEach((input, i) => {
+        const node = input.node as HTMLInputElement;
+        if (i === 3) {
+          validation = this.validateCardNumber();
+        }
+        if (i === 4 && node.value.length !== 5) {
+          validation = false;
+          this.errFields.get('expire')?.node.classList.add('card-error_active');
+        } else if (i === 4) {
+          this.errFields.get('expire')?.node.classList.remove('card-error_active');
+        }
+        if (i === 5 && node.value.length !== 3) {
+          validation = false;
+          this.errFields.get('cvc')?.node.classList.add('card-error_active');
+        } else if (i === 5) {
+          this.errFields.get('cvc')?.node.classList.remove('card-error_active');
+        }
+      });
+
+      if (!validationArr.length && validation) {
         (this.formInfo.node as HTMLFormElement).reset();
         const items = CartController.getCartItems();
         items?.forEach((elem) => {
@@ -176,6 +198,22 @@ export class Modal extends Component {
 
   checkWordsNumValidity = (str: string, minWordsNum: number) => {
     return str.trim().split(' ').length >= minWordsNum;
+  };
+
+  validateCardNumber = () => {
+    let digitsNum = 0;
+    this.cardData.forEach((input, i) => {
+      if (i <= 3) {
+        const node = input.node as HTMLInputElement;
+        digitsNum += node.value.length;
+      }
+    });
+    if (digitsNum !== 16) {
+      this.errFields.get('card number')?.node.classList.add('card-error_active');
+    } else {
+      this.errFields.get('card number')?.node.classList.remove('card-error_active');
+    }
+    return digitsNum === 16;
   };
 
   validatePhoneOrEmail = (fieldName: string, fieldVal: string) => {
