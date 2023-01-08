@@ -1,5 +1,5 @@
 import { Component } from '../component';
-import { tittles, personalData, cardData, imgSrc, confirmText } from '../../constants/modal';
+import { tittles, fieldsNames, cardData, imgSrc, confirmText } from '../../constants/modal';
 import './Modal.scss';
 import { CartController } from '../../Helpers/cartController';
 
@@ -10,6 +10,8 @@ export class Modal extends Component {
   phone: Component;
   address: Component;
   mail: Component;
+  errFields: Map<string, Component> = new Map();
+  userData: Component[] = [];
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'div', 'modal');
@@ -21,9 +23,12 @@ export class Modal extends Component {
     new Component(formContainer.node, 'h3', 'form-title', 'personal data');
     this.formInfo = new Component(formContainer.node, 'form', 'form-info');
 
-    [this.name, this.phone, this.address, this.mail] = personalData.map((elem) => {
+    [this.name, this.phone, this.address, this.mail] = fieldsNames.map((elem) => {
       const inputBox = new Component(this.formInfo.node, 'div', 'input-box');
       const input = new Component(inputBox.node, 'input', 'input');
+      const errField = new Component(inputBox.node, 'span', 'error', `error in ${elem}`);
+      this.userData.push(input);
+      this.errFields.set(elem, errField);
       input.node.setAttribute('placeholder', elem);
       return input;
     });
@@ -93,24 +98,36 @@ export class Modal extends Component {
     const confirmBtn = new Component(formContainer.node, 'button', 'form-btn', 'confirm');
 
     confirmBtn.node.onclick = () => {
-      const nameVal = (this.name.node as HTMLInputElement).value;
-      console.log('checkNameInp=', this.checkNameOrAddressInp(nameVal, 'name'));
-      const addressVal = (this.address.node as HTMLInputElement).value;
-      console.log('checkAddressInp=', this.checkNameOrAddressInp(addressVal, 'address'));
+      let validationArr: boolean[] = [];
+      this.userData.forEach((input, i) => {
+        const fieldVal = (input.node as HTMLInputElement).value;
+        const validation = this.validateField(fieldsNames[i], fieldVal);
 
-      (this.formInfo.node as HTMLFormElement).reset();
-
-      const items = CartController.getCartItems();
-      items?.forEach((elem) => {
-        CartController.remove(elem.id);
+        validationArr.push(validation);
+        if (!validation) {
+          this.errFields.get(fieldsNames[i])?.node.classList.add('error_active');
+          input.node.classList.add('input_active');
+        } else {
+          this.errFields.get(fieldsNames[i])?.node.classList.remove('error_active');
+          input.node.classList.remove('input_active');
+        }
       });
 
-      overlay.node.classList.add('overlay_active');
+      validationArr = validationArr.filter((validation) => validation === false);
 
-      setTimeout(() => {
-        this.node.classList.remove('modal-active');
-        window.location.hash = 'products';
-      }, 3000);
+      if (!validationArr.length) {
+        (this.formInfo.node as HTMLFormElement).reset();
+        const items = CartController.getCartItems();
+        items?.forEach((elem) => {
+          CartController.remove(elem.id);
+        });
+        overlay.node.classList.add('overlay_active');
+
+        setTimeout(() => {
+          this.node.classList.remove('modal-active');
+          window.location.hash = 'products';
+        }, 3000);
+      }
     };
 
     this.node.onclick = (e) => {
@@ -118,7 +135,7 @@ export class Modal extends Component {
     };
   }
 
-  restrictPhoneNumberInput() {
+  restrictPhoneNumberInput = () => {
     const curValue = (this.phone.node as HTMLInputElement).value;
     const prevValue = curValue.slice(0, curValue.length - 1);
     const last = curValue.slice(curValue.length - 1);
@@ -130,34 +147,43 @@ export class Modal extends Component {
     } else if (curValue.length > 10) {
       (this.phone.node as HTMLInputElement).value = prevValue;
     }
-  }
+  };
 
-  checkWordsNum(str: string, minWordsNum: number) {
-    return str.trim().split(' ').length >= minWordsNum;
-  }
+  validateField = (fieldName: string, fieldVal: string) => {
+    let isValid = true;
+    if (fieldName === 'name' || fieldName === 'address') {
+      isValid = this.validateNameOrAddress(fieldName, fieldVal);
+    }
+    if (fieldName === 'phone' || fieldName === 'email') {
+      isValid = this.validatePhoneOrEmail(fieldName, fieldVal);
+    }
+    return isValid;
+  };
 
-  checkWordsValidity(str: string, minWordLength: number) {
+  checkWordsLengthValidity = (str: string, minWordLength: number) => {
     const words = str.trim().split(' ');
     const regExp = minWordLength === 5 ? /^\w{5}/ : /^\w{3}/;
     const validWords = words.filter((word) => regExp.test(word));
     return words.length === validWords.length;
-  }
+  };
 
-  checkNameOrAddressInp(inputStr: string, goal: string) {
-    const [numLimit, lengthLimit] = goal === 'name' ? [2, 3] : [3, 5];
+  checkWordsNumValidity = (str: string, minWordsNum: number) => {
+    return str.trim().split(' ').length >= minWordsNum;
+  };
+
+  validatePhoneOrEmail = (fieldName: string, fieldVal: string) => {
+    const pattern = fieldName === 'phone' ? /^\+\d{9}/ : /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    return pattern.test(fieldVal);
+  };
+
+  validateNameOrAddress = (fieldName: string, fieldVal: string) => {
+    const [numLimit, lengthLimit] = fieldName === 'name' ? [2, 3] : [3, 5];
     if (
-      !this.checkWordsNum(inputStr, numLimit) ||
-      !this.checkWordsValidity(inputStr, lengthLimit)
+      !this.checkWordsNumValidity(fieldVal, numLimit) ||
+      !this.checkWordsLengthValidity(fieldVal, lengthLimit)
     ) {
       return false;
     }
     return true;
-  }
-
-  checkNumberValidity(str: string, minWordLength: number) {
-    const words = str.trim().split(' ');
-    const regExp = minWordLength === 5 ? /^\w{5}/ : /^\w{3}/;
-    const validWords = words.filter((word) => regExp.test(word));
-    return words.length === validWords.length;
-  }
+  };
 }

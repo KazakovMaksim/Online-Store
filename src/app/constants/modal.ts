@@ -6,7 +6,7 @@ export const tittles = {
   mail: 'field must contain correct e-mail address',
 };
 
-export const personalData = ['name', 'phone number', 'delivery address', 'e-mail'];
+export const fieldsNames = ['name', 'phone', 'address', 'email'];
 
 export const cardData = ['Expire', 'Cvc'];
 
