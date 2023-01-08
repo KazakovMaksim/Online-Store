@@ -35,13 +35,11 @@ export class Modal extends Component {
       this.errFields.set(elem, errField);
       input.node.setAttribute('placeholder', elem);
       input.node.setAttribute('title', tittles[i]);
+      if (elem === 'phone') {
+        input.node.setAttribute('maxlength', '10');
+      }
       return input;
     });
-
-    const phone = this.userData[1];
-    phone.node.oninput = () => {
-      this.restrictPhoneNumberInput(phone);
-    };
 
     new Component(formContainer.node, 'h3', 'form-title', 'credit card details');
 
@@ -178,22 +176,6 @@ export class Modal extends Component {
       if (e.target === this.node) this.node.classList.remove('modal-active');
     };
   }
-
-  restrictPhoneNumberInput = (phone: Component) => {
-    const phoneNode = phone.node as HTMLInputElement;
-    const curValue = phoneNode.value;
-    const prevValue = curValue.slice(0, curValue.length - 1);
-    const last = curValue.slice(curValue.length - 1);
-
-    if (curValue.length === 1 && curValue !== '+') {
-      phoneNode.value = curValue.replace(/./g, '');
-    } else if (
-      (curValue.length >= 2 && curValue.length <= 10 && !/\d/.test(last)) ||
-      curValue.length > 10
-    ) {
-      phoneNode.value = prevValue;
-    }
-  };
 
   validateUserField = (fieldName: string, fieldVal: string) => {
     let isValid = true;
