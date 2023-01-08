@@ -80,7 +80,7 @@ export class Modal extends Component {
       const label = new Component(cardInputs.node, 'label', 'card-label', elem);
       label.node.setAttribute('for', elem);
       const input = new Component(cardInputs.node, 'input');
-      const max = elem === 'Cvc' ? '3' : '5';
+      const max = elem === 'cvc' ? '3' : '5';
       input.node.setAttribute('maxlength', max);
       input.node.setAttribute('id', elem);
       if (elem === 'Expire') this.expire = input;

@@ -7,7 +7,7 @@ export const tittles = [
 
 export const fieldsNames = ['name', 'phone', 'address', 'email'];
 
-export const cardData = ['Expire', 'Cvc'];
+export const cardData = ['expire', 'cvc'];
 
 export const imgSrc = [
   '../../../assets/img/pay-system.png',
