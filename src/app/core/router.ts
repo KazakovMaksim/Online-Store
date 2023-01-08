@@ -4,6 +4,7 @@ import { HomePage } from '../components/HomePage/HomePage';
 import { CartPage } from '../components/CartPage/CartPage';
 import { ProductsPage } from '../components/ProductsPage/ProductsPage';
 import { ProductDetailsPage } from '../components/ProductDetailsPage/productDetails';
+import { PageNotFound } from '../components/404page/404page';
 
 export const routing: IRoute[] = [
   {
@@ -21,6 +22,6 @@ export const routing: IRoute[] = [
 ];
 
 export const defaultRoute: IRoute = {
-  name: Href.HOME,
-  component: () => new HomePage(null),
+  name: Href.NOTFOUND,
+  component: () => new PageNotFound(null),
 };

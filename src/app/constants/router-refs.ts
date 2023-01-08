@@ -1,5 +1,5 @@
 export const enum Href {
-  HOME = 'home',
+  NOTFOUND = '404',
   CART = 'cart',
   PRODUCTS = 'products',
   PRODUCT_DETAILS = 'product-details',
