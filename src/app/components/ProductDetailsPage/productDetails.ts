@@ -59,6 +59,15 @@ export class ProductDetailsPage extends Component {
     const btnAdd = new Component(buttonsBlock.node, 'button', 'btn btn-desc-add', 'Add to Cart');
     const btnBuyNow = new Component(buttonsBlock.node, 'button', 'btn btn-desc-buy-now', 'Buy Now');
 
+    btnBuyNow.node.onclick = () => {
+      console.log('btnAdd.node.innerText');
+      if (btnAdd.node.innerText !== 'Drop from Cart') {
+        btnAdd.node.dispatchEvent(new Event('click'));
+      }
+      localStorage.setItem('modal', 'true');
+      window.location.hash = 'cart';
+    };
+
     btnAdd.node.addEventListener('click', () => {
       if (!this.node.classList.contains('in-cart')) {
         this.node.classList.add('in-cart');
