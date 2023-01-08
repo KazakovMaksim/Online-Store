@@ -130,16 +130,18 @@ export class Modal extends Component {
   }
 
   restrictPhoneNumberInput = (phone: Component) => {
-    const curValue = (phone.node as HTMLInputElement).value;
+    const phoneNode = phone.node as HTMLInputElement;
+    const curValue = phoneNode.value;
     const prevValue = curValue.slice(0, curValue.length - 1);
     const last = curValue.slice(curValue.length - 1);
 
     if (curValue.length === 1 && curValue !== '+') {
-      (phone.node as HTMLInputElement).value = curValue.replace(/./g, '');
-    } else if (curValue.length >= 2 && curValue.length <= 10 && !/\d/.test(last)) {
-      (phone.node as HTMLInputElement).value = prevValue;
-    } else if (curValue.length > 10) {
-      (phone.node as HTMLInputElement).value = prevValue;
+      phoneNode.value = curValue.replace(/./g, '');
+    } else if (
+      (curValue.length >= 2 && curValue.length <= 10 && !/\d/.test(last)) ||
+      curValue.length > 10
+    ) {
+      phoneNode.value = prevValue;
     }
   };
 
