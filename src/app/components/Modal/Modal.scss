@@ -53,8 +53,6 @@
     & input {
       font-size: 0.9rem;
       padding: 10px 5px;
-      margin-bottom: 7px;
-      margin-top: 7px;
     }
     .form-btn {
       padding: 5px 30px;
@@ -97,6 +95,7 @@
 .error {
   visibility: hidden;
   font-weight: 600;
+  line-height: 1.5rem;
   color: #E53F71;
   &_active {
     visibility: visible;
@@ -112,6 +111,15 @@
     border-radius: 10px;
     border: 1px solid #000;
     margin: 0 auto;
+  }
+  &-error {
+    font-size: 0.9rem;
+    color: #F89F5B;
+    font-weight: 600;
+    visibility: hidden;
+    &_active {
+      visibility: visible;
+    }
   }
   &-heading {
     @include flex(space-between);
@@ -133,6 +141,7 @@
   &-inputs {
     @include flex(initial);
     column-gap: 8px;
+    padding-top: 10px;
   }
   &-input {
     width: 50px;
@@ -145,6 +154,9 @@
     font-weight: 600;
     text-transform: uppercase;
   }
+  &-number>span {
+    padding-left: 15px;
+  }
   &-validity {
     @include flex(flex-end, initial);
     padding-top: 15px;
@@ -154,10 +166,10 @@
       border-radius: 5px;
       text-align: center;
     }
-    & input:last-child {
+    & input:nth-child(6) {
       width: 40px;
     }
-    & input:nth-child(2) {
+    & input:nth-child(3) {
       width: 50px;
     }
   }

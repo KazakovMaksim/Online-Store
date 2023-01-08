@@ -54,6 +54,7 @@ export class Modal extends Component {
     const fieldset = new Component(cardContainer.node, 'fieldset', 'card-fieldset');
     const cardNumber = new Component(fieldset.node, 'div', 'card-number');
     const labelNum = new Component(cardNumber.node, 'label', 'card-label', 'card number');
+    const errSpan = new Component(cardNumber.node, 'span', 'card-error', `card number error`);
     labelNum.node.setAttribute('for', 'number1');
     const inputs = new Component(cardNumber.node, 'div', 'card-inputs');
 
@@ -84,6 +85,7 @@ export class Modal extends Component {
     const cardValidity = new Component(fieldset.node, 'div', 'card-validity');
     const cardInputs = new Component(cardValidity.node, 'div', 'card-inputs');
     cardDataFields.forEach((elem) => {
+      const errSpan = new Component(cardInputs.node, 'span', 'card-error', `${elem} error`);
       const label = new Component(cardInputs.node, 'label', 'card-label', elem);
       label.node.setAttribute('for', elem);
       const input = new Component(cardInputs.node, 'input');
