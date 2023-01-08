@@ -35,9 +35,6 @@ export class Modal extends Component {
       this.errFields.set(elem, errField);
       input.node.setAttribute('placeholder', elem);
       input.node.setAttribute('title', tittles[i]);
-      if (elem === 'phone') {
-        input.node.setAttribute('maxlength', '10');
-      }
       return input;
     });
 
@@ -216,7 +213,7 @@ export class Modal extends Component {
   };
 
   validatePhoneOrEmail = (fieldName: string, fieldVal: string) => {
-    const pattern = fieldName === 'phone' ? /^\+\d{9}/ : /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    const pattern = fieldName === 'phone' ? /^\+\d{9,}/ : /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
     return pattern.test(fieldVal);
   };
 
