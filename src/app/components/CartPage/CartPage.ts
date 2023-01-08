@@ -20,6 +20,7 @@ export class CartPage extends Component {
     promoCodes.forEach((code) => {
       code.added = false;
     });
+    CartController.initCart();
     super(parentNode, 'div', 'cart-page wrapper');
 
     const cartContainer = new Component(this.node, 'div', 'cart-page-container');

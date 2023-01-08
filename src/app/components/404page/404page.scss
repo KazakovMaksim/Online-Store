@@ -1,0 +1,13 @@
+.not-found-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.error-code{
+  font-size: 10rem;
+  font-weight: bold;
+}

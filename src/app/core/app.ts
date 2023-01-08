@@ -7,6 +7,7 @@ import { ProductsPage } from '../components/ProductsPage/ProductsPage';
 import { routing, defaultRoute } from './router';
 import { ProductDetailsPage } from '../components/ProductDetailsPage/productDetails';
 import { CartController } from '../Helpers/cartController';
+import { PageNotFound } from '../components/404page/404page';
 
 export class App {
   main = new Component(null, 'main', 'main');
@@ -46,11 +47,11 @@ export class App {
       if (currentRoute && this.mainContent) {
         this.main.node.append(this.mainContent.node);
       } else {
-        this.mainContent = defaultRoute.component() as HomePage;
+        this.mainContent = defaultRoute.component() as PageNotFound;
         this.main.node.append(this.mainContent.node);
       }
     };
-
+    window.location.hash = '#products';
     const popstateEvent = new Event('popstate');
     window.dispatchEvent(popstateEvent);
   };
