@@ -5,9 +5,9 @@ export const tittles = [
   'EMAIL must contain correct e-mail address',
 ];
 
-export const fieldsNames = ['name', 'phone', 'address', 'email'];
+export const userDataFields = ['name', 'phone', 'address', 'email'];
 
-export const cardData = ['expire', 'cvc'];
+export const cardDataFields = ['expire', 'cvc'];
 
 export const imgSrc = [
   '../../../assets/img/pay-system.png',

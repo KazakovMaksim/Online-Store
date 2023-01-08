@@ -1,5 +1,11 @@
 import { Component } from '../component';
-import { tittles, fieldsNames, cardData, imgSrc, confirmText } from '../../constants/modal';
+import {
+  tittles,
+  userDataFields,
+  cardDataFields,
+  imgSrc,
+  confirmText,
+} from '../../constants/modal';
 import './Modal.scss';
 import { CartController } from '../../Helpers/cartController';
 
@@ -8,6 +14,7 @@ export class Modal extends Component {
   expire: Component | null = null;
   errFields: Map<string, Component> = new Map();
   userData: Component[] = [];
+  cardData: Component[] = [];
 
   constructor(parentNode: HTMLElement) {
     super(parentNode, 'div', 'modal');
@@ -19,7 +26,7 @@ export class Modal extends Component {
     new Component(formContainer.node, 'h3', 'form-title', 'personal data');
     this.formInfo = new Component(formContainer.node, 'form', 'form-info');
 
-    fieldsNames.map((elem, i) => {
+    userDataFields.map((elem, i) => {
       const inputBox = new Component(this.formInfo.node, 'div', 'input-box');
       const input = new Component(inputBox.node, 'input', 'input');
       const errField = new Component(inputBox.node, 'span', 'error', `error in ${elem}`);
@@ -42,6 +49,7 @@ export class Modal extends Component {
     const cardHeading = new Component(cardContainer.node, 'div', 'card-heading');
     new Component(cardHeading.node, 'div', 'card-bank', 'Sberbank');
     const logo = new Component(cardHeading.node, 'img', 'card-logo');
+    logo.node.setAttribute('src', imgSrc[0]);
 
     const fieldset = new Component(cardContainer.node, 'fieldset', 'card-fieldset');
     const cardNumber = new Component(fieldset.node, 'div', 'card-number');
@@ -53,6 +61,7 @@ export class Modal extends Component {
       const input = new Component(inputs.node, 'input', 'card-input');
       input.node.setAttribute('maxlength', '4');
       input.node.setAttribute('id', `number${i + 1}`);
+      this.cardData.push(input);
 
       input.node.oninput = () => {
         const node = input.node as HTMLInputElement;
@@ -72,22 +81,21 @@ export class Modal extends Component {
       }
     });
 
-    logo.node.setAttribute('src', imgSrc[0]);
-
     const cardValidity = new Component(fieldset.node, 'div', 'card-validity');
     const cardInputs = new Component(cardValidity.node, 'div', 'card-inputs');
-    cardData.forEach((elem) => {
+    cardDataFields.forEach((elem) => {
       const label = new Component(cardInputs.node, 'label', 'card-label', elem);
       label.node.setAttribute('for', elem);
       const input = new Component(cardInputs.node, 'input');
+      this.cardData.push(input);
       const max = elem === 'cvc' ? '3' : '5';
       input.node.setAttribute('maxlength', max);
       input.node.setAttribute('id', elem);
       if (elem === 'Expire') this.expire = input;
 
       input.node.oninput = () => {
-        const expire = input.node as HTMLInputElement;
-        expire.value = expire.value.replace(/[^\d]/g, '');
+        const node = input.node as HTMLInputElement;
+        node.value = node.value.replace(/[^\d]/g, '');
       };
     });
     const confirmBtn = new Component(formContainer.node, 'button', 'form-btn', 'confirm');
@@ -96,14 +104,14 @@ export class Modal extends Component {
       let validationArr: boolean[] = [];
       this.userData.forEach((input, i) => {
         const fieldVal = (input.node as HTMLInputElement).value;
-        const validation = this.validateField(fieldsNames[i], fieldVal);
+        const validation = this.validateUserField(userDataFields[i], fieldVal);
 
         validationArr.push(validation);
         if (!validation) {
-          this.errFields.get(fieldsNames[i])?.node.classList.add('error_active');
+          this.errFields.get(userDataFields[i])?.node.classList.add('error_active');
           input.node.classList.add('input_active');
         } else {
-          this.errFields.get(fieldsNames[i])?.node.classList.remove('error_active');
+          this.errFields.get(userDataFields[i])?.node.classList.remove('error_active');
           input.node.classList.remove('input_active');
         }
       });
@@ -146,7 +154,7 @@ export class Modal extends Component {
     }
   };
 
-  validateField = (fieldName: string, fieldVal: string) => {
+  validateUserField = (fieldName: string, fieldVal: string) => {
     let isValid = true;
     if (fieldName === 'name' || fieldName === 'address') {
       isValid = this.validateNameOrAddress(fieldName, fieldVal);
