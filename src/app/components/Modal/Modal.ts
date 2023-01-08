@@ -6,10 +6,6 @@ import { CartController } from '../../Helpers/cartController';
 export class Modal extends Component {
   formInfo: Component;
   expire: Component | null = null;
-  name: Component;
-  phone: Component;
-  address: Component;
-  mail: Component;
   errFields: Map<string, Component> = new Map();
   userData: Component[] = [];
 
@@ -23,23 +19,21 @@ export class Modal extends Component {
     new Component(formContainer.node, 'h3', 'form-title', 'personal data');
     this.formInfo = new Component(formContainer.node, 'form', 'form-info');
 
-    [this.name, this.phone, this.address, this.mail] = fieldsNames.map((elem) => {
+    fieldsNames.map((elem, i) => {
       const inputBox = new Component(this.formInfo.node, 'div', 'input-box');
       const input = new Component(inputBox.node, 'input', 'input');
       const errField = new Component(inputBox.node, 'span', 'error', `error in ${elem}`);
+
       this.userData.push(input);
       this.errFields.set(elem, errField);
       input.node.setAttribute('placeholder', elem);
+      input.node.setAttribute('title', tittles[i]);
       return input;
     });
 
-    this.name.node.setAttribute('title', tittles.name);
-    this.address.node.setAttribute('title', tittles.address);
-    this.phone.node.setAttribute('title', tittles.phone);
-    this.mail.node.setAttribute('title', tittles.mail);
-
-    this.phone.node.oninput = () => {
-      this.restrictPhoneNumberInput();
+    const phone = this.userData[1];
+    phone.node.oninput = () => {
+      this.restrictPhoneNumberInput(phone);
     };
 
     new Component(formContainer.node, 'h3', 'form-title', 'credit card details');
@@ -135,17 +129,17 @@ export class Modal extends Component {
     };
   }
 
-  restrictPhoneNumberInput = () => {
-    const curValue = (this.phone.node as HTMLInputElement).value;
+  restrictPhoneNumberInput = (phone: Component) => {
+    const curValue = (phone.node as HTMLInputElement).value;
     const prevValue = curValue.slice(0, curValue.length - 1);
     const last = curValue.slice(curValue.length - 1);
 
     if (curValue.length === 1 && curValue !== '+') {
-      (this.phone.node as HTMLInputElement).value = curValue.replace(/./g, '');
+      (phone.node as HTMLInputElement).value = curValue.replace(/./g, '');
     } else if (curValue.length >= 2 && curValue.length <= 10 && !/\d/.test(last)) {
-      (this.phone.node as HTMLInputElement).value = prevValue;
+      (phone.node as HTMLInputElement).value = prevValue;
     } else if (curValue.length > 10) {
-      (this.phone.node as HTMLInputElement).value = prevValue;
+      (phone.node as HTMLInputElement).value = prevValue;
     }
   };
 
