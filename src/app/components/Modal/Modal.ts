@@ -63,6 +63,7 @@ export class Modal extends Component {
       const input = new Component(inputs.node, 'input', 'card-input');
       input.node.setAttribute('maxlength', '4');
       input.node.setAttribute('id', `number${i + 1}`);
+      input.node.setAttribute('placeholder', 'XXXX');
       this.cardData.push(input);
 
       input.node.oninput = () => {
@@ -93,14 +94,30 @@ export class Modal extends Component {
       const input = new Component(cardInputs.node, 'input');
       this.cardData.push(input);
       const max = elem === 'cvc' ? '3' : '5';
+      const placeholder = elem === 'cvc' ? 'cvc' : 'm/y';
       input.node.setAttribute('maxlength', max);
+      input.node.setAttribute('placeholder', placeholder);
       input.node.setAttribute('id', elem);
-      if (elem === 'Expire') this.expire = input;
-
-      input.node.oninput = () => {
-        const node = input.node as HTMLInputElement;
-        node.value = node.value.replace(/[^\d]/g, '');
-      };
+      if (elem === 'expire') {
+        let prevInp = '';
+        input.node.oninput = () => {
+          const expire = input.node as HTMLInputElement;
+          const prev = prevInp;
+          const curr = expire.value;
+          prevInp = expire.value;
+          if (curr.length === 2 && curr.length > prev.length) {
+            expire.value = `${expire.value}/`;
+          }
+          if (curr.length === 2 && curr.length <= prev.length) {
+            expire.value = expire.value.slice(0, 1);
+          }
+        };
+      } else {
+        input.node.oninput = () => {
+          const node = input.node as HTMLInputElement;
+          node.value = node.value.replace(/[^\d]/g, '');
+        };
+      }
     });
     const confirmBtn = new Component(formContainer.node, 'button', 'form-btn', 'confirm');
 
@@ -128,7 +145,7 @@ export class Modal extends Component {
         if (i === 3) {
           validation = this.validateCardNumber();
         }
-        if (i === 4 && node.value.length !== 5) {
+        if (i === 4 && (node.value.length !== 5 || +node.value.split('/')[0] > 12)) {
           validation = false;
           this.errFields.get('expire')?.node.classList.add('card-error_active');
         } else if (i === 4) {
