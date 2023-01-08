@@ -48,16 +48,17 @@ export class Modal extends Component {
     const labelNum = new Component(cardNumber.node, 'label', 'card-label', 'card number');
     labelNum.node.setAttribute('for', 'number1');
     const inputs = new Component(cardNumber.node, 'div', 'card-inputs');
+
     [...new Array(4)].forEach((elem, i) => {
       const input = new Component(inputs.node, 'input', 'card-input');
       input.node.setAttribute('maxlength', '4');
       input.node.setAttribute('id', `number${i + 1}`);
+
       input.node.oninput = () => {
-        (input.node as HTMLInputElement).value = (input.node as HTMLInputElement).value.replace(
-          /[^\d]/g,
-          '',
-        );
+        const node = input.node as HTMLInputElement;
+        node.value = node.value.replace(/[^\d]/g, '');
       };
+
       if (i === 0) {
         input.node.addEventListener('input', () => {
           const curValue = (input.node as HTMLInputElement).value;
