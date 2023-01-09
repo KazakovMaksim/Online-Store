@@ -42,7 +42,7 @@ export class App {
       }
       if (currentRouteName === 'product-details') {
         const productId = Number(hash.slice(hash.indexOf('/') + 1));
-        this.mainContent = currentRoute?.component(productId) as ProductDetailsPage;
+        this.mainContent = currentRoute?.component(productId, this) as ProductDetailsPage;
       }
 
       if (currentRoute && this.mainContent) {

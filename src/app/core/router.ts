@@ -17,7 +17,8 @@ export const routing: IRoute[] = [
   },
   {
     name: Href.PRODUCT_DETAILS,
-    component: (productId?: number): ProductDetailsPage => new ProductDetailsPage(null, productId),
+    component: (productId?: number, app?: App | undefined): ProductDetailsPage =>
+      new ProductDetailsPage(null, productId, app),
   },
 ];
 

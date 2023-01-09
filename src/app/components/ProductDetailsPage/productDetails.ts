@@ -1,11 +1,14 @@
+import { App } from '../../core/app';
 import { products } from '../../data/products';
 import { CartController } from '../../Helpers/cartController';
 import { Product } from '../../types/interface';
+import { CartItem } from '../../types/interface';
+import { CartPage } from '../CartPage/CartPage';
 import { Component } from '../component';
 import './productDetails.scss';
 
 export class ProductDetailsPage extends Component {
-  constructor(parentNode: HTMLElement | null, productId?: number) {
+  constructor(parentNode: HTMLElement | null, productId?: number, app?: App) {
     super(parentNode, 'div', 'product-details-page wrapper');
     const selectedProduct: Product = products.products.find(
       (product) => product.id === productId,
@@ -58,6 +61,19 @@ export class ProductDetailsPage extends Component {
     // buttons block
     const btnAdd = new Component(buttonsBlock.node, 'button', 'btn btn-desc-add', 'Add to Cart');
     const btnBuyNow = new Component(buttonsBlock.node, 'button', 'btn btn-desc-buy-now', 'Buy Now');
+
+    btnBuyNow.node.addEventListener('click', () => {
+      if (productId) {
+        const cartItems = CartController.getCartItems();
+        const isItemInCart = cartItems?.find((item: CartItem) => item.id === productId);
+        if (!isItemInCart) {
+          CartController.add(productId);
+        }
+        window.location.hash = 'cart';
+        console.log();
+        (app?.mainContent as CartPage).onBuyNow();
+      }
+    });
 
     btnAdd.node.addEventListener('click', () => {
       if (!this.node.classList.contains('in-cart')) {

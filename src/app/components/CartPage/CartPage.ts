@@ -15,6 +15,7 @@ export class CartPage extends Component {
   updateCartItemsList: () => void;
   setMaxPages: () => void;
   updateSummary: () => void;
+  onBuyNow: () => void = () => null;
   modal: Modal;
 
   constructor(parentNode: HTMLElement | null, app: App | undefined) {
@@ -48,11 +49,12 @@ export class CartPage extends Component {
     const cartItemsList = new Component(cartContainer.node, 'div', 'cart-page-items-list');
 
     // functions & event-handlers
-    summary.OnBuyNow = () => {
+    this.onBuyNow = () => {
       this.modal.node.classList.add('modal-active');
       app?.main.node.classList.add('modal-open');
       document.documentElement.classList.add('modal-open');
     };
+    summary.OnBuyNow = this.onBuyNow;
 
     this.updateCartItemsList = () => {
       const CartItems = CartController.getCartItems();
