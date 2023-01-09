@@ -62,7 +62,7 @@ export class ProductDetailsPage extends Component {
     btnBuyNow.node.onclick = () => {
       console.log('btnAdd.node.innerText');
       if (btnAdd.node.innerText !== 'Drop from Cart') {
-        btnAdd.node.dispatchEvent(new Event('click'));
+        CartController.add(selectedProduct.id);
       }
       localStorage.setItem('modal', 'true');
       window.location.hash = 'cart';
