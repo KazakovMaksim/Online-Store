@@ -194,7 +194,7 @@ export class Modal extends Component {
 
   checkWordsLengthValidity = (str: string, minWordLength: number) => {
     const words = str.trim().split(' ');
-    const regExp = minWordLength === 5 ? /^\w{5}/ : /^\w{3}/;
+    const regExp = minWordLength === 5 ? /[А-Яа-яA-Za-z]{5,}/ : /[А-Яа-яA-Za-z]{3,}/;
     const validWords = words.filter((word) => regExp.test(word));
     return words.length === validWords.length;
   };
@@ -220,7 +220,7 @@ export class Modal extends Component {
   };
 
   validatePhoneOrEmail = (fieldName: string, fieldVal: string) => {
-    const pattern = fieldName === 'phone' ? /^\+\d{9,}/ : /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    const pattern = fieldName === 'phone' ? /^\+\d{9,}$/ : /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
     return pattern.test(fieldVal);
   };
 
