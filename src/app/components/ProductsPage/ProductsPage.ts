@@ -92,12 +92,13 @@ export class ProductsPage extends Component {
     if (this.searchStr) {
       newCards = newCards.filter((card: Card) => {
         let key: keyof Card;
+        const regExp = new RegExp(this.searchStr, 'i');
         for (key in card) {
           let cardFeat = card[key];
           if (typeof cardFeat === 'string' || typeof cardFeat === 'number') {
             cardFeat = String(cardFeat);
-            if (cardFeat.toLocaleLowerCase().includes(this.searchStr)) {
-              return cardFeat.toLocaleLowerCase().includes(this.searchStr);
+            if (regExp.test(cardFeat)) {
+              return card;
             }
           }
         }
