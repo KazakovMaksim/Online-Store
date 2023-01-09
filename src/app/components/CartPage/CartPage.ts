@@ -6,6 +6,7 @@ import { Component } from '../component';
 import { Summary } from '../Summary/summary';
 import { Modal } from '../Modal/Modal';
 import './CartPage.scss';
+import { App } from '../../core/app';
 
 export class CartPage extends Component {
   maxPages = 1;
@@ -14,14 +15,15 @@ export class CartPage extends Component {
   updateCartItemsList: () => void;
   setMaxPages: () => void;
   updateSummary: () => void;
-  modal = new Modal(this.node);
+  modal: Modal;
 
-  constructor(parentNode: HTMLElement | null) {
+  constructor(parentNode: HTMLElement | null, app: App | undefined) {
     promoCodes.forEach((code) => {
       code.added = false;
     });
     CartController.initCart();
     super(parentNode, 'div', 'cart-page wrapper');
+    this.modal = new Modal(this.node, app);
 
     const cartContainer = new Component(this.node, 'div', 'cart-page-container');
     const summaryContainer = new Component(this.node, 'div', 'summary-container');
@@ -48,6 +50,8 @@ export class CartPage extends Component {
     // functions & event-handlers
     summary.OnBuyNow = () => {
       this.modal.node.classList.add('modal-active');
+      app?.main.node.classList.add('modal-open');
+      document.documentElement.classList.add('modal-open');
     };
 
     this.updateCartItemsList = () => {

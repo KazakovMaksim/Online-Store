@@ -11,7 +11,7 @@ import { PageNotFound } from '../components/404page/404page';
 
 export class App {
   main = new Component(null, 'main', 'main');
-
+  header: Header | null = null;
   mainContent: null | CartPage | HomePage | ProductsPage = null;
 
   enableRouteChange = (): void => {
@@ -26,6 +26,7 @@ export class App {
 
       if (!document.body.children.length) {
         const header = new Header();
+        this.header = header;
         CartController.updateCartQty = header.updateCartQty;
         CartController.updateTotalAmount = header.updateTotalAmount;
         document.body.append(header.node, this.main.node, new Footer().node);
@@ -37,7 +38,7 @@ export class App {
         this.mainContent = currentRoute?.component() as ProductsPage;
       }
       if (currentRouteName === 'cart') {
-        this.mainContent = currentRoute?.component() as CartPage;
+        this.mainContent = currentRoute?.component(1, this) as CartPage;
       }
       if (currentRouteName === 'product-details') {
         const productId = Number(hash.slice(hash.indexOf('/') + 1));
