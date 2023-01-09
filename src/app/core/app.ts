@@ -17,11 +17,11 @@ export class App {
   enableRouteChange = (): void => {
     window.onpopstate = () => {
       const hash = window.location.hash;
-      const currentRouteName = hash.slice(
+      let currentRouteName = hash.slice(
         1,
         hash.indexOf('/') === -1 ? undefined : hash.indexOf('/'),
       );
-      const currentRoute = routing.find((p) => p.name === currentRouteName);
+      let currentRoute = routing.find((p) => p.name === currentRouteName);
       this.mainContent?.node.remove();
 
       if (!document.body.children.length) {
@@ -31,6 +31,11 @@ export class App {
         document.body.append(header.node, this.main.node, new Footer().node);
         CartController.setCartQty();
         CartController.setTotalAmount();
+      }
+
+      if (!window.location.hash) {
+        currentRouteName = 'products';
+        currentRoute = routing[1];
       }
 
       if (currentRouteName === 'products') {
@@ -43,7 +48,6 @@ export class App {
         const productId = Number(hash.slice(hash.indexOf('/') + 1));
         this.mainContent = currentRoute?.component(productId) as ProductDetailsPage;
       }
-
       if (currentRoute && this.mainContent) {
         this.main.node.append(this.mainContent.node);
       } else {
@@ -51,7 +55,7 @@ export class App {
         this.main.node.append(this.mainContent.node);
       }
     };
-    window.location.hash = '#products';
+
     const popstateEvent = new Event('popstate');
     window.dispatchEvent(popstateEvent);
   };
