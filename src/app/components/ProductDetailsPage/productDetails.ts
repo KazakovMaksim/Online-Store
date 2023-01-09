@@ -70,7 +70,6 @@ export class ProductDetailsPage extends Component {
           CartController.add(productId);
         }
         window.location.hash = 'cart';
-        console.log();
         (app?.mainContent as CartPage).onBuyNow();
       }
     });
