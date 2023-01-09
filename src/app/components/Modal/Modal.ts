@@ -8,6 +8,7 @@ import {
 } from '../../constants/modal';
 import './Modal.scss';
 import { CartController } from '../../Helpers/cartController';
+import { App } from '../../core/app';
 
 export class Modal extends Component {
   formInfo: Component;
@@ -16,7 +17,7 @@ export class Modal extends Component {
   userData: Component[] = [];
   cardData: Component[] = [];
 
-  constructor(parentNode: HTMLElement) {
+  constructor(parentNode: HTMLElement, app: App | undefined) {
     super(parentNode, 'div', 'modal');
 
     const formContainer = new Component(this.node, 'div', 'form-container');
@@ -166,9 +167,11 @@ export class Modal extends Component {
         });
         overlay.node.classList.add('overlay_active');
 
+
         setTimeout(() => {
           this.node.classList.remove('modal-active');
           window.location.hash = 'products';
+          this.removeModal(app);
         }, 3000);
       }
     };
@@ -176,10 +179,18 @@ export class Modal extends Component {
     this.node.onclick = (e) => {
       if (e.target === this.node) {
         this.node.classList.remove('modal-active');
+        this.removeModal(app);
         (this.formInfo.node as HTMLFormElement).reset();
       }
     };
   }
+
+  removeModal = (app: App | undefined) => {
+    if (app) {
+      app.main.node.classList.remove('modal-open');
+      document.documentElement.classList.remove('modal-open');
+    }
+  };
 
   validateUserField = (fieldName: string, fieldVal: string) => {
     let isValid = true;

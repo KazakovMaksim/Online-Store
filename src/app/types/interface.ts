@@ -1,8 +1,9 @@
 import { Component } from '../components/component';
+import { App } from '../core/app';
 
 export interface IRoute {
   name: string;
-  component: (id?: number) => Component;
+  component: (id?: number, app?: App) => Component;
 }
 
 export type Selector = 'category' | 'brand';
