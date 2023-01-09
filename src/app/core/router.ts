@@ -4,11 +4,12 @@ import { CartPage } from '../components/CartPage/CartPage';
 import { ProductsPage } from '../components/ProductsPage/ProductsPage';
 import { ProductDetailsPage } from '../components/ProductDetailsPage/productDetails';
 import { PageNotFound } from '../components/404page/404page';
+import { App } from './app';
 
 export const routing: IRoute[] = [
   {
     name: Href.CART,
-    component: (): CartPage => new CartPage(null),
+    component: (id, app: App | undefined): CartPage => new CartPage(null, app),
   },
   {
     name: Href.PRODUCTS,
@@ -16,7 +17,8 @@ export const routing: IRoute[] = [
   },
   {
     name: Href.PRODUCT_DETAILS,
-    component: (productId?: number): ProductDetailsPage => new ProductDetailsPage(null, productId),
+    component: (productId?: number, app?: App | undefined): ProductDetailsPage =>
+      new ProductDetailsPage(null, productId, app),
   },
 ];
 

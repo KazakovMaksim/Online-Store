@@ -2,6 +2,14 @@ import { products } from '../data/products';
 import { CartItem } from '../types/interface';
 
 export class CartController {
+  getCartItem(id: number) {
+    const item = products.products.find((product) => product.id === id);
+    if (item) {
+      const cartItem: CartItem = { id: item.id, cost: item.price, quantity: 1 };
+      return cartItem;
+    }
+  }
+
   static initCart() {
     if (!localStorage.getItem('Cart')) localStorage.setItem('Cart', '[]');
   }
