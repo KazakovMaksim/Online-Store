@@ -45,9 +45,9 @@ export class CartPage extends Component {
 
     const cartItemsList = new Component(cartContainer.node, 'div', 'cart-page-items-list');
 
-    const ls = localStorage.getItem('modal');
+    const isFromDetail = localStorage.getItem('modalCallFromDetail');
 
-    if (ls && ls === 'true') {
+    if (isFromDetail && isFromDetail === 'true') {
       this.modal.node.classList.add('modal-active');
     }
     // functions & event-handlers

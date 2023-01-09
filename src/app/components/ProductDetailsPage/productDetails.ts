@@ -64,7 +64,7 @@ export class ProductDetailsPage extends Component {
       if (btnAdd.node.innerText !== 'Drop from Cart') {
         CartController.add(selectedProduct.id);
       }
-      localStorage.setItem('modal', 'true');
+      localStorage.setItem('modalCallFromDetail', 'true');
       window.location.hash = 'cart';
     };
 

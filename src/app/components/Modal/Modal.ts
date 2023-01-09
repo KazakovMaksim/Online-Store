@@ -176,6 +176,7 @@ export class Modal extends Component {
     this.node.onclick = (e) => {
       if (e.target === this.node) {
         this.node.classList.remove('modal-active');
+        localStorage.setItem('modalCallFromDetail', 'false');
         (this.formInfo.node as HTMLFormElement).reset();
       }
     };
