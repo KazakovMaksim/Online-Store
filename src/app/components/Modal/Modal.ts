@@ -17,7 +17,7 @@ export class Modal extends Component {
   userData: Component[] = [];
   cardData: Component[] = [];
 
-  constructor(parentNode: HTMLElement, app: App | undefined) {
+  constructor(parentNode: HTMLElement | null, app: App | undefined) {
     super(parentNode, 'div', 'modal');
 
     const formContainer = new Component(this.node, 'div', 'form-container');
@@ -167,7 +167,6 @@ export class Modal extends Component {
         });
         overlay.node.classList.add('overlay_active');
 
-
         setTimeout(() => {
           this.node.classList.remove('modal-active');
           window.location.hash = 'products';
@@ -205,7 +204,7 @@ export class Modal extends Component {
 
   checkWordsLengthValidity = (str: string, minWordLength: number) => {
     const words = str.trim().split(' ');
-    const regExp = minWordLength === 5 ? /[А-Яа-яA-Za-z]{5,}/ : /[А-Яа-яA-Za-z]{3,}/;
+    const regExp = minWordLength === 5 ? /[А-Яа-яA-Za-z]{5,}$/ : /[А-Яа-яA-Za-z]{3,}/;
     const validWords = words.filter((word) => regExp.test(word));
     return words.length === validWords.length;
   };
