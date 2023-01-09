@@ -1,0 +1,39 @@
+.filter {
+  &-info {
+    padding: 15px 5px ;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-range {
+    width: 100%;
+  }
+  &-from,
+  &-to {
+    max-width: 60px;
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid #666;;
+    padding: 10px;
+    text-align: center;
+    box-shadow: inset 0 0 0 1px #999;
+  }
+}
+.noUi-connect {
+  background-color: #653780;
+  opacity: 0.5;
+}
+.noUi-horizontal .noUi-handle {
+  width: 14px;
+  right: -7px;
+  background-color: #653780;
+  border-radius: 5px;
+}
+.noUi-handle::before {
+  left: 4px;
+}
+.noUi-handle::after {
+  left: 8px;
+}
+.noUi-target{
+  padding: 0 1px;
+}

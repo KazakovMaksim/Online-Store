@@ -1,0 +1,55 @@
+// @import './app/components/Header/header.scss';
+* {
+  box-sizing: border-box;
+}
+
+html{
+  background-color: rgb(255, 255, 255);
+  font-size: 16px;
+  font-family: 'Baloo2';
+  line-height: 1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p{
+  margin: 0;
+  font-size: 1rem;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+body{
+  margin: 0;
+}
+
+.main{
+  z-index: 0;
+  position: relative;
+  min-height: 100vh;
+}
+
+.wrapper{
+  max-width: 1250px;
+  margin: 0 auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.btn{
+  font-family: "Baloo2";
+  line-height: 1.2;
+}
+
+@media screen and (max-width: 650px) {
+  html{
+    font-size: 14px;
+  }
+}
